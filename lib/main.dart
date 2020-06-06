@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:appwrite/appwrite.dart';
 
 void main() {
   runApp(MyApp());
@@ -54,6 +55,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incrementCounter() {
     setState(() {
+      Client client = Client();
+      Account account = Account(client);
+
+      client
+          .setEndpoint(
+              'http://10.0.2.2:80/v1//account/sessions/') // Your API Endpoint
+          .setProject('5eda5682bbb13'); // Your project ID
+      //    .setSelfSigned();
+      Future result = account.deleteSession(
+        sessionId: 'current',
+      );
+
+      result.then((response) {
+        print(response);
+      }).catchError((error) {
+        print(error.response);
+      });
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
       // so that the display can reflect the updated values. If we changed
@@ -71,6 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
+
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
