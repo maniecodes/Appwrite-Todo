@@ -1,3 +1,5 @@
+import 'package:appwrite_project/screens/login_screen.dart';
+import 'package:appwrite_project/screens/registration_screen.dart';
 import 'package:appwrite_project/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +32,6 @@ class WelcomeScreen extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 25,
-                      // color: AppTheme.getTheme().colorScheme.primary
                     ),
                   ),
                 ),
@@ -55,54 +56,78 @@ class WelcomeScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    Container(
-                      width: MediaQuery.of(context).size.width / 2.7,
-                      padding: EdgeInsets.symmetric(vertical: 15),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                color: Colors.grey.shade500,
-                                offset: Offset(2, 2),
-                                blurRadius: 5,
-                                spreadRadius: 2)
-                          ],
-                          gradient: LinearGradient(
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              colors: [
-                                HexColor('#223FA1'),
-                                HexColor('#223FA1'),
-                              ])),
-                      child: Text(
-                        'Login',
-                        style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20, color: Colors.white),
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) {
+                            return LoginScreen();
+                          }),
+                        );
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width / 2.7,
+                        padding: EdgeInsets.symmetric(vertical: 15),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                  color: Colors.grey.shade500,
+                                  offset: Offset(2, 2),
+                                  blurRadius: 5,
+                                  spreadRadius: 2)
+                            ],
+                            gradient: LinearGradient(
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                                colors: [
+                                  HexColor('#223FA1'),
+                                  HexColor('#223FA1'),
+                                ])),
+                        child: Text(
+                          'Login',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 20,
+                              color: Colors.white),
+                        ),
                       ),
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width / 2.7,
-                      padding: EdgeInsets.symmetric(vertical: 15),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                color: Colors.grey.shade400,
-                                offset: Offset(2, 2),
-                                blurRadius: 5,
-                                spreadRadius: 1)
-                          ],
-                          gradient: LinearGradient(
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              colors: [
-                                Colors.white,
-                                Colors.white,
-                              ])),
-                      child: Text(
-                        'Sign up',
-                        style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20, color: Colors.black),
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) {
+                            return RegistrationScreen();
+                          }),
+                        );
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width / 2.7,
+                        padding: EdgeInsets.symmetric(vertical: 15),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                  color: Colors.grey.shade400,
+                                  offset: Offset(2, 2),
+                                  blurRadius: 5,
+                                  spreadRadius: 1)
+                            ],
+                            gradient: LinearGradient(
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                                colors: [
+                                  Colors.white,
+                                  Colors.white,
+                                ])),
+                        child: Text(
+                          'Sign up',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 20,
+                              color: Colors.black),
+                        ),
                       ),
                     ),
                   ],
