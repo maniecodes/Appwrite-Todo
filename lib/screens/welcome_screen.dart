@@ -1,9 +1,16 @@
+import 'package:appwrite_project/resources/user_repository.dart';
 import 'package:appwrite_project/screens/login_screen.dart';
 import 'package:appwrite_project/screens/registration_screen.dart';
 import 'package:appwrite_project/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatelessWidget {
+  final UserRepository _userRepository;
+
+  WelcomeScreen({Key key, @required UserRepository userRepository})
+      : assert(userRepository != null),
+        _userRepository = userRepository,
+        super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +67,9 @@ class WelcomeScreen extends StatelessWidget {
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(builder: (context) {
-                            return LoginScreen();
+                            return LoginScreen(
+                              userRepository: _userRepository,
+                            );
                           }),
                         );
                       },
@@ -97,7 +106,9 @@ class WelcomeScreen extends StatelessWidget {
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(builder: (context) {
-                            return RegistrationScreen();
+                            return RegistrationScreen(
+                              userRepository: _userRepository,
+                            );
                           }),
                         );
                       },

@@ -12,13 +12,9 @@ part 'registration_state.dart';
 
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   final UserRepository _userRepository;
-  final String name;
-  final String phoneNumber;
 
   RegistrationBloc({
     @required UserRepository userRepository,
-    @required this.name,
-    @required this.phoneNumber,
   })  : assert(userRepository != null),
         _userRepository = userRepository;
 
@@ -51,7 +47,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     } else if (event is PasswordChanged) {
       yield* _mapPasswordChangedToState(event.password);
     } else if (event is RegistrationSubmitted) {
-      yield* _mapFormSubmittedToState(event.email, event.password);
+      yield* _mapFormSubmittedToState(event.email, event.password, event.name);
     }
   }
 
@@ -74,15 +70,16 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   Stream<RegistrationState> _mapFormSubmittedToState(
     String email,
     String password,
+    String name,
   ) async* {
     yield RegistrationState.loading();
     try {
       await _userRepository.signup(
-        email: email,
-        password: password,
-      );
+          email: email, password: password, name: name);
       yield RegistrationState.success();
     } catch (e) {
+      print('registration bloc');
+      print(e.toString());
       yield RegistrationState.failure(e.toString());
     }
   }

@@ -1,8 +1,9 @@
 part of 'registration_bloc.dart';
 
-
 @immutable
 class RegistrationState {
+  final bool isNameValid;
+  final bool isPhoneNumberValid;
   final bool isEmailValid;
   final bool isPasswordValid;
   final bool isSubmitting;
@@ -10,10 +11,13 @@ class RegistrationState {
   final bool isFailure;
   final String isError;
 
-  bool get isFormValid => isEmailValid && isPasswordValid;
+  bool get isFormValid =>
+      isNameValid && isPhoneNumberValid && isEmailValid && isPasswordValid;
 
   RegistrationState(
-      {@required this.isEmailValid,
+      {@required this.isNameValid,
+      @required this.isPhoneNumberValid,
+      @required this.isEmailValid,
       @required this.isPasswordValid,
       @required this.isSubmitting,
       @required this.isSuccess,
@@ -22,6 +26,8 @@ class RegistrationState {
 
   factory RegistrationState.empty() {
     return RegistrationState(
+      isNameValid: true,
+      isPhoneNumberValid: true,
       isEmailValid: true,
       isPasswordValid: true,
       isSubmitting: false,
@@ -32,6 +38,8 @@ class RegistrationState {
 
   factory RegistrationState.loading() {
     return RegistrationState(
+      isNameValid: true,
+      isPhoneNumberValid: true,
       isEmailValid: true,
       isPasswordValid: true,
       isSubmitting: true,
@@ -42,6 +50,8 @@ class RegistrationState {
 
   factory RegistrationState.failure(String error) {
     return RegistrationState(
+        isNameValid: true,
+        isPhoneNumberValid: true,
         isEmailValid: true,
         isPasswordValid: true,
         isSubmitting: false,
@@ -52,6 +62,8 @@ class RegistrationState {
 
   factory RegistrationState.success() {
     return RegistrationState(
+      isNameValid: true,
+      isPhoneNumberValid: true,
       isEmailValid: true,
       isPasswordValid: true,
       isSubmitting: false,
@@ -61,10 +73,14 @@ class RegistrationState {
   }
 
   RegistrationState update({
+    bool isNameValid,
+    bool isPhoneNumberValid,
     bool isEmailValid,
     bool isPasswordValid,
   }) {
     return copyWith(
+      isNameValid: isNameValid,
+      isPhoneNumberValid: isPhoneNumberValid,
       isEmailValid: isEmailValid,
       isPasswordValid: isPasswordValid,
       isSubmitting: false,
@@ -74,6 +90,8 @@ class RegistrationState {
   }
 
   RegistrationState copyWith({
+    bool isNameValid,
+    bool isPhoneNumberValid,
     bool isEmailValid,
     bool isPasswordValid,
     bool isSubmitEnabled,
@@ -82,6 +100,8 @@ class RegistrationState {
     bool isFailure,
   }) {
     return RegistrationState(
+      isNameValid: isNameValid ?? this.isNameValid,
+      isPhoneNumberValid: isPhoneNumberValid ?? this.isPhoneNumberValid,
       isEmailValid: isEmailValid ?? this.isEmailValid,
       isPasswordValid: isPasswordValid ?? this.isPasswordValid,
       isSubmitting: isSubmitting ?? this.isSubmitting,
@@ -93,6 +113,8 @@ class RegistrationState {
   @override
   String toString() {
     return '''RegistrationState {
+      isNameValid: $isNameValid,
+      isPhoneNumberValid: $isPhoneNumberValid,
       isEmailValid: $isEmailValid,
       isPasswordValid: $isPasswordValid,      
       isSubmitting: $isSubmitting,
