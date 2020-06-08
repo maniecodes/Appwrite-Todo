@@ -1,6 +1,6 @@
-import 'package:appwrite_project/authentication/authentication_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../authentication/authentication_bloc.dart';
 import '../blocs/login/login_bloc.dart';
 import '../resources/user_repository.dart';
 import '../screens/registration_screen.dart';

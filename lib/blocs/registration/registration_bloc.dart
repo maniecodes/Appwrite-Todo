@@ -1,11 +1,12 @@
 import 'dart:async';
-import 'package:appwrite_project/utils/Validators.dart';
+
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../resources/user_repository.dart';
+import '../../utils/Validators.dart';
 
 part 'registration_event.dart';
 part 'registration_state.dart';

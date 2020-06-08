@@ -1,8 +1,8 @@
-import 'package:appwrite_project/resources/user_repository.dart';
-import 'package:appwrite_project/screens/login_screen.dart';
-import 'package:appwrite_project/screens/registration_screen.dart';
-import 'package:appwrite_project/utils/app_theme.dart';
 import 'package:flutter/material.dart';
+import '../resources/user_repository.dart';
+import '../screens/login_screen.dart';
+import '../screens/registration_screen.dart';
+import '../utils/app_theme.dart';
 
 class WelcomeScreen extends StatelessWidget {
   final UserRepository _userRepository;

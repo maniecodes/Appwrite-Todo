@@ -1,7 +1,7 @@
 import 'package:appwrite_project/utils/hex_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:appwrite_project/authentication/authentication_bloc.dart';
+import '../authentication/authentication_bloc.dart';
 import '../blocs/registration/registration_bloc.dart';
 import '../resources/user_repository.dart';
 import '../screens/login_screen.dart';
