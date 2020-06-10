@@ -1,55 +1,46 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
+import 'package:appwrite_project/authentication/authentication_event.dart';
+import 'package:appwrite_project/authentication/authentication_state.dart';
+import 'package:appwrite_project/resources/user_repository.dart';
 import 'package:meta/meta.dart';
-import '../resources/user_repository.dart';
-
-part 'authentication_event.dart';
-part 'authentication_state.dart';
-
+import 'package:bloc/bloc.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  final UserRepository _userRepository;
+  final UserRepository userRepository;
 
-  AuthenticationBloc({@required UserRepository userRepository})
-      : assert(userRepository != null),
-        _userRepository = userRepository;
+  AuthenticationBloc({@required this.userRepository})
+      : assert(userRepository != null);
 
   @override
-  AuthenticationState get initialState => Uninitialized();
+  AuthenticationState get initialState => AuthenticationUninitialized();
 
   @override
   Stream<AuthenticationState> mapEventToState(
     AuthenticationEvent event,
   ) async* {
     if (event is AppStarted) {
-      yield* _mapAppStartedToState();
-    } else if (event is LoggedIn) {
-      yield* _mapLoggedInToState();
-    } else if (event is LoggedOut) {
-      yield* _mapLoggedOutToState();
+      final bool isSignedIn = await userRepository.isSignedIn();
+      print('is signed in');
+      print(isSignedIn);
+      if (isSignedIn) {
+        yield AuthenticationAuthenticated();
+      } else {
+        yield AuthenticationUnauthenticated();
+      }
     }
-  }
 
-  Stream<AuthenticationState> _mapAppStartedToState() async* {
-    final isSignedIn = await _userRepository.isSignedIn();
-    if (isSignedIn) {
-      final uid = await _userRepository.currentUser();
-
-      yield Authenticated(uid);
-    } else {
-      yield Unauthenticated();
+    if (event is LoggedIn) {
+      yield AuthenticationLoading();
+      await userRepository.getSession();
+      yield AuthenticationAuthenticated();
     }
-  }
 
-  Stream<AuthenticationState> _mapLoggedInToState() async* {
-    yield Authenticated(await _userRepository.currentUser());
-  }
-
-  Stream<AuthenticationState> _mapLoggedOutToState() async* {
-    yield Unauthenticated();
-    _userRepository.signOut();
+    if (event is LoggedOut) {
+      yield AuthenticationLoading();
+      await userRepository.signOut();
+      yield AuthenticationUnauthenticated();
+    }
   }
 }

@@ -83,6 +83,7 @@ class UserRepository {
     if (errorMessage != null) {
       return Future.error(errorMessage);
     }
+    return false;
   }
 
   Future<bool> isSignedIn() async {
@@ -107,6 +108,7 @@ class UserRepository {
       Response<dynamic> result = await account.getSessions();
       if (result.statusCode == 200) {
         sessionId = result.data[0]['\$id'];
+        print('sessionId');
       } else {
         sessionId = null;
       }
@@ -172,7 +174,7 @@ class UserRepository {
       );
 
       result.then((response) {
-        print('i got in here');
+        print('logged out');
         print(response);
       }).catchError((error) {
         print(error.response);

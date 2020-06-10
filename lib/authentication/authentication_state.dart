@@ -1,24 +1,14 @@
-part of 'authentication_bloc.dart';
+import 'package:equatable/equatable.dart';
 
 abstract class AuthenticationState extends Equatable {
-  const AuthenticationState();
-
   @override
   List<Object> get props => [];
 }
 
-class Uninitialized extends AuthenticationState {}
+class AuthenticationUninitialized extends AuthenticationState {}
 
-class Authenticated extends AuthenticationState {
-  final String uid;
+class AuthenticationAuthenticated extends AuthenticationState {}
 
-  const Authenticated(this.uid);
+class AuthenticationUnauthenticated extends AuthenticationState {}
 
-  @override
-  List<Object> get props => [uid];
-
-  @override
-  String toString() => 'Authenticated { uid: $uid }';
-}
-
-class Unauthenticated extends AuthenticationState {}
+class AuthenticationLoading extends AuthenticationState {}

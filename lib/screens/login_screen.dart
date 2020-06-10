@@ -1,3 +1,4 @@
+import 'package:appwrite_project/authentication/authentication_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../blocs/login/login_bloc.dart';
@@ -24,7 +25,9 @@ class LoginScreen extends StatelessWidget {
         elevation: 0.0,
       ),
       body: BlocProvider<LoginBloc>(
-          create: (context) => LoginBloc(userRepository: _userRepository),
+          create: (context) => LoginBloc(
+              userRepository: _userRepository,
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)),
           child: SingleChildScrollView(
             child: Login(
               userRepository: _userRepository,

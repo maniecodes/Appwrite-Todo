@@ -1,3 +1,4 @@
+import 'package:appwrite_project/authentication/authentication_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../blocs/registration/registration_bloc.dart';
@@ -24,11 +25,10 @@ class RegistrationScreen extends StatelessWidget {
         child: BlocProvider<RegistrationBloc>(
           create: (context) => RegistrationBloc(
               userRepository: _userRepository,
-           ),
+              authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)),
           child: Registration(
-              userRepository: _userRepository,
-              name: name,
-              phoneNumber: phoneNumber),
+            userRepository: _userRepository,
+          ),
         ),
       ),
     );

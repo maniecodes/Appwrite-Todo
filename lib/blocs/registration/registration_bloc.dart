@@ -1,87 +1,42 @@
 import 'dart:async';
 
+import 'package:appwrite_project/authentication/authentication_bloc.dart';
+import 'package:appwrite_project/authentication/authentication_event.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
-import 'package:rxdart/rxdart.dart';
 
 import '../../resources/user_repository.dart';
-import '../../utils/Validators.dart';
 
 part 'registration_event.dart';
 part 'registration_state.dart';
 
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
-  final UserRepository _userRepository;
+  final UserRepository userRepository;
+  final AuthenticationBloc authenticationBloc;
 
   RegistrationBloc({
-    @required UserRepository userRepository,
+    @required this.userRepository,
+    @required this.authenticationBloc,
   })  : assert(userRepository != null),
-        _userRepository = userRepository;
+        assert(authenticationBloc != null);
 
   @override
-  RegistrationState get initialState => RegistrationState.empty();
+  RegistrationState get initialState => RegistrationInitial();
 
-  @override
-  Stream<Transition<RegistrationEvent, RegistrationState>> transformEvents(
-    Stream<RegistrationEvent> events,
-    TransitionFunction<RegistrationEvent, RegistrationState> transitionFn,
-  ) {
-    final nonDebounceStream = events.where((event) {
-      return (event is! EmailChanged && event is! PasswordChanged);
-    });
-    final debounceStream = events.where((event) {
-      return (event is EmailChanged || event is PasswordChanged);
-    }).debounceTime(Duration(milliseconds: 300));
-    return super.transformEvents(
-      nonDebounceStream.mergeWith([debounceStream]),
-      transitionFn,
-    );
-  }
+  Stream<RegistrationState> mapEventToState(RegistrationEvent event) async* {
+    if (event is RegistrationButtonPressed) {
+      yield RegistrationLoading();
 
-  @override
-  Stream<RegistrationState> mapEventToState(
-    RegistrationEvent event,
-  ) async* {
-    if (event is EmailChanged) {
-      yield* _mapEmailChangedToState(event.email);
-    } else if (event is PasswordChanged) {
-      yield* _mapPasswordChangedToState(event.password);
-    } else if (event is RegistrationSubmitted) {
-      yield* _mapFormSubmittedToState(event.email, event.password, event.name);
-    }
-  }
+      try {
+        await userRepository.signup(
+            email: event.email, password: event.password, name: event.name);
+        authenticationBloc.add(LoggedIn());
 
-  Stream<RegistrationState> _mapEmailChangedToState(String email) async* {
-    if (email.length > 0) {
-      yield state.update(
-        isEmailValid: Validators.isValidEmail(email),
-      );
-    }
-  }
-
-  Stream<RegistrationState> _mapPasswordChangedToState(String password) async* {
-    if (password.length > 0) {
-      yield state.update(
-        isPasswordValid: Validators.isValidPassword(password),
-      );
-    }
-  }
-
-  Stream<RegistrationState> _mapFormSubmittedToState(
-    String email,
-    String password,
-    String name,
-  ) async* {
-    yield RegistrationState.loading();
-    try {
-      await _userRepository.signup(
-          email: email, password: password, name: name);
-      yield RegistrationState.success();
-    } catch (e) {
-      print('registration bloc');
-      print(e.toString());
-      yield RegistrationState.failure(e.toString());
+        yield RegistrationInitial();
+      } catch (e) {
+        yield RegistrationFailure(error: e.toString());
+      }
     }
   }
 }
