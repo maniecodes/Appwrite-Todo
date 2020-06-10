@@ -1,15 +1,10 @@
-import 'package:appwrite_project/authentication/authentication_event.dart';
-import 'package:appwrite_project/authentication/authentication_state.dart';
-import 'package:appwrite_project/utils/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import './authentication/authentication_bloc.dart';
-import './screens/splash_screen.dart';
-import './screens/home_screen.dart';
-import './screens/welcome_screen.dart';
+import './screens/screens.dart';
 import './resources/user_repository.dart';
-import './utils/app_theme.dart';
+import './utils/utils.dart';
+import './authentication/authentication.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

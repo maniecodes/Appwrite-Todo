@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import '../resources/user_repository.dart';
-import '../screens/login_screen.dart';
-import '../screens/registration_screen.dart';
-import '../utils/app_theme.dart';
+import './screens.dart';
+import '../utils/utils.dart';
 
 class WelcomeScreen extends StatelessWidget {
   final UserRepository _userRepository;

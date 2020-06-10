@@ -1,9 +1,10 @@
 import 'package:appwrite_project/resources/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../blocs/login/login_bloc.dart';
-import '../screens/registration_screen.dart';
-import '../utils/hex_color.dart';
+import '../blocs/blocs.dart';
+import '../resources/user_repository.dart';
+import './screens.dart';
+import '../utils/utils.dart';
 
 class Login extends StatefulWidget {
   final UserRepository _userRepository;
