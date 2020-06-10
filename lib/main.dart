@@ -5,22 +5,29 @@ import './screens/screens.dart';
 import './resources/user_repository.dart';
 import './utils/utils.dart';
 import './authentication/authentication.dart';
+import './blocs/blocs.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   final UserRepository userRepository = UserRepository();
-  runApp(BlocProvider<AuthenticationBloc>(
-    create: (context) => AuthenticationBloc(
-      userRepository: userRepository,
-    )..add(AppStarted()),
-    child: App(userRepository: userRepository),
+  BlocSupervisor.delegate = SimpleBlocDelegate();
+  runApp(MultiBlocProvider(
+    providers: [
+      BlocProvider<AuthenticationBloc>(
+        create: (context) => AuthenticationBloc(
+          userRepository: userRepository,
+        )..add(AppStarted()),
+        //   child: TaskApp(userRepository: userRepository),
+      )
+    ],
+    child: TaskApp(userRepository: userRepository),
   ));
 }
 
-class App extends StatelessWidget {
+class TaskApp extends StatelessWidget {
   final UserRepository _userRepository;
 
-  App({Key key, @required UserRepository userRepository})
+  TaskApp({Key key, @required UserRepository userRepository})
       : assert(userRepository != null),
         _userRepository = userRepository,
         super(key: key);
