@@ -1,11 +1,13 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 import './screens/screens.dart';
-import './resources/user_repository.dart';
 import './utils/utils.dart';
 import './authentication/authentication.dart';
 import './blocs/blocs.dart';
+import './resources/repository.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,10 +20,22 @@ void main() {
           userRepository: userRepository,
         )..add(AppStarted()),
         //   child: TaskApp(userRepository: userRepository),
-      )
+      ),
+      BlocProvider(create: (context) {
+        return TasksBloc(
+          tasksRepository: const TasksRepositoryFlutter(
+            fileStorage: const FileStorage(
+              '__task_app__',
+              getApplicationDocumentsDirectory,
+            ),
+          ),
+        )..add(TasksLoaded());
+      })
     ],
     child: TaskApp(userRepository: userRepository),
   ));
+
+  // child: TaskApp(userRepository: userRepository),
 }
 
 class TaskApp extends StatelessWidget {
@@ -53,8 +67,13 @@ class TaskApp extends StatelessWidget {
           return BlocBuilder<AuthenticationBloc, AuthenticationState>(
             builder: (context, state) {
               if (state is AuthenticationAuthenticated) {
-                print('login to home screen');
-                return HomeScreen();
+                //return HomeScreen();
+                return MultiBlocProvider(providers: [
+                  BlocProvider<DrawerBloc>(
+                    create: (context) => DrawerBloc(
+                        tasksBloc: BlocProvider.of<TasksBloc>(context)),
+                  )
+                ], child: HomeScreen());
               }
               if (state is AuthenticationUnauthenticated) {
                 return WelcomeScreen(userRepository: _userRepository);

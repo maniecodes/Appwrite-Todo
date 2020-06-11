@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../authentication/authentication.dart';
+import 'package:flutter/material.dart';
+import '../widgets/app_drawer.dart';
+
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -10,13 +10,12 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Home'),
       ),
+      drawer: AppDrawer(),
       body: Container(
         child: Center(
             child: RaisedButton(
           child: Text('logout'),
-          onPressed: () {
-            BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut());
-          },
+          onPressed: () {},
         )),
       ),
     );

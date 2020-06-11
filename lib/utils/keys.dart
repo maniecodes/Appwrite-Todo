@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ArchSampleKeys {
+class TasksKeys {
   // Home Screens
   static const homeScreen = Key('__homeScreen__');
   static const addTaskFab = Key('__addTaskFab__');
@@ -10,7 +10,7 @@ class ArchSampleKeys {
   // Tasks
   static const taskList = Key('__taskList__');
   static const tasksLoading = Key('__tasksLoading__');
-  static final taskItem = (String id) => Key('TaskItem__${id}');
+  static final taskItem = (String id) => Key('TaskItem__$id');
   static final taskItemCheckbox =
       (String id) => Key('TaskItem__${id}__Checkbox');
   static final taskItemTask = (String id) => Key('TaskItem__${id}__Task');
@@ -55,4 +55,16 @@ class ArchSampleKeys {
   // Edit Screen
   static const editTaskScreen = Key('__editTaskScreen__');
   static const saveTaskFab = Key('__saveTaskFab__');
+
+  static final extraActionsPopupMenuButton =
+      const Key('__extraActionsPopupMenuButton__');
+  static final extraActionsEmptyContainer =
+      const Key('__extraActionsEmptyContainer__');
+  static final filteredTasksEmptyContainer =
+      const Key('__filteredTasksEmptyContainer__');
+  static final statsLoadInProgressIndicator =
+      const Key('__statsLoadingIndicator__');
+  static final emptyStatsContainer = const Key('__emptyStatsContainer__');
+  static final emptyDetailsContainer = const Key('__emptyDetailsContainer__');
+  static final detailsScreenCheckBox = const Key('__detailsScreenCheckBox__');
 }
