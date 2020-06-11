@@ -1,5 +1,5 @@
-import 'package:equatable/equatable.dart';
-import 'package:appwrite_project/models/models.dart';
+part of 'tasks_bloc.dart';
+
 
 abstract class TasksState extends Equatable {
   const TasksState();
