@@ -14,7 +14,7 @@ class TasksLoaded extends TasksEvent {}
 class TaskAdded extends TasksEvent {
   final Task task;
 
-  const TaskAdded({this.task});
+  const TaskAdded(this.task);
 
   @override
   String toString() => 'TaskAdded {task: $task}';
@@ -24,7 +24,7 @@ class TaskAdded extends TasksEvent {
 class TaskUpdated extends TasksEvent {
   final Task task;
 
-  const TaskUpdated({this.task});
+  const TaskUpdated(this.task);
 
   @override
   List<Object> get props => [task];
@@ -37,7 +37,7 @@ class TaskUpdated extends TasksEvent {
 class TaskDeleted extends TasksEvent {
   final Task task;
 
-  const TaskDeleted({this.task});
+  const TaskDeleted(this.task);
 
   @override
   List<Object> get props => [task];

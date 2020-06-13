@@ -1,4 +1,4 @@
-
+import 'package:appwrite_project/blocs/filtered_tasks/filtered_tasks_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -71,6 +71,10 @@ class TaskApp extends StatelessWidget {
                 return MultiBlocProvider(providers: [
                   BlocProvider<DrawerBloc>(
                     create: (context) => DrawerBloc(
+                        tasksBloc: BlocProvider.of<TasksBloc>(context)),
+                  ),
+                  BlocProvider<FilteredTasksBloc>(
+                    create: (context) => FilteredTasksBloc(
                         tasksBloc: BlocProvider.of<TasksBloc>(context)),
                   )
                 ], child: HomeScreen());
