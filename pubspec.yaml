@@ -30,6 +30,7 @@ dependencies:
   intl: ^0.16.1
   rxdart: ^0.23.1
   path_provider: ^1.6.10
+  shared_preferences: ^0.4.3
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../blocs/blocs.dart';
@@ -30,7 +29,8 @@ class _RegistrationState extends State<Registration> {
       BlocProvider.of<RegistrationBloc>(context).add(RegistrationButtonPressed(
           email: _emailController.text,
           password: _passwordController.text,
-          name: _nameController.text));
+          name: _nameController.text,
+          phone: _phoneNumberController.text));
     }
 
     return BlocListener<RegistrationBloc, RegistrationState>(

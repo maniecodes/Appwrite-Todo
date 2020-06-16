@@ -29,7 +29,10 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
 
       try {
         await userRepository.signup(
-            email: event.email, password: event.password, name: event.name);
+            email: event.email,
+            password: event.password,
+            name: event.name,
+            phone: event.phone);
         authenticationBloc.add(LoggedIn());
 
         yield RegistrationInitial();

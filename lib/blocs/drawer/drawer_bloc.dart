@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:appwrite_project/blocs/tasks/tasks_bloc.dart';
 import 'package:appwrite_project/models/models.dart';
+import 'package:appwrite_project/models/user.dart';
+import 'package:appwrite_project/resources/repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,10 +13,12 @@ part 'drawer_state.dart';
 
 class DrawerBloc extends Bloc<DrawerEvent, DrawerState> {
   final TasksBloc tasksBloc;
+  final UserRepository userRepository;
+
   // final DrawerTab drawerTab;
   StreamSubscription tasksSubscription;
 
-  DrawerBloc({@required this.tasksBloc}) {
+  DrawerBloc({@required this.tasksBloc, this.userRepository}) {
     tasksSubscription = tasksBloc.listen((state) {
       if (state is TasksLoadSuccess) {
         add(DrawerUpdated(state.tasks));
@@ -28,6 +32,12 @@ class DrawerBloc extends Bloc<DrawerEvent, DrawerState> {
   @override
   Stream<DrawerState> mapEventToState(DrawerEvent event) async* {
     if (event is DrawerUpdated) {
+      //await this.userRepository.getUserInfo();
+      // final email = users.email;
+      // final name = users.name;
+      // final phone = users.phone;
+
+      print('inside here');
       // int numFavourite =
       //     event.tasks.where((task) => !task.favourite).toList().length;
       // int numTasks = event.tasks.length;
@@ -35,7 +45,10 @@ class DrawerBloc extends Bloc<DrawerEvent, DrawerState> {
       int numTasks = 10;
       int numPlanned = 23;
       int numMyDay = 5;
-      yield DrawerLoadSuccess(numFavourite, numPlanned, numMyDay, numTasks);
+      yield DrawerLoadSuccess(
+        numFavourite, numPlanned, numMyDay, numTasks,
+        // email, name, phone
+      );
     }
   }
 

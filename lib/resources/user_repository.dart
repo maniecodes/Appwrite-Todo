@@ -1,12 +1,16 @@
 import 'package:appwrite/appwrite.dart';
+import 'package:appwrite_project/models/user_entity.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserRepository {
   Client client = Client(selfSigned: true);
   static const API_ENDPOINT = "http://10.0.2.2/v1";
-  static const PROJECT_ID = "5eda5682bbb13";
+  static const PROJECT_ID = "5ee7c6be5d831";
+  static const COLLECTION_ID = "5ee7f40c38388";
 
   // Signup a user and also create an account session.
-  Future<String> signup({String email, String password, String name}) async {
+  Future<String> signup(
+      {String email, String password, String name, String phone}) async {
     String uid;
     String errorMessage;
     client
@@ -22,6 +26,7 @@ class UserRepository {
       if (uid != null) {
         print('creating user session....');
         await createUserSession(email, password);
+        await saveUserDetails(email, name, phone);
       }
     } catch (error) {
       switch (error.response.data['code'].toString()) {
@@ -44,6 +49,50 @@ class UserRepository {
     return uid;
   }
 
+  Future saveUserDetails(String email, String name, String phone) async {
+    client
+        .setEndpoint('$API_ENDPOINT/') // Your API Endpoint
+        .setProject('$PROJECT_ID') // Your project ID
+        .selfSigned;
+
+    Database database = Database(client);
+
+    try {
+      await database.createDocument(
+          collectionId: '$COLLECTION_ID',
+          data: {'email': email, 'name': name, 'phone': phone},
+          read: ['*'],
+          write: ['*']);
+      // return result.data;
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<UserEntity> getUserInfo() async {
+    final sessionID = currentUser();
+
+    Database database = Database(client);
+
+    client
+            .setEndpoint(
+                '$API_ENDPOINT/database/collections/$COLLECTION_ID/documents') // Your API Endpoint
+            .setProject('$PROJECT_ID') // Your project ID
+        ;
+
+    Future result = database.listDocuments(
+      collectionId: '[$COLLECTION_ID]',
+      filters: ['uid = $sessionID'],
+    );
+
+    result.then((response) {
+      print('getuserinfo');
+      print(response);
+    }).catchError((error) {
+      print(error.response);
+    });
+  }
+
   Future<bool> createUserSession(String email, String password) async {
     print('create user session');
     String errorMessage;
@@ -53,11 +102,13 @@ class UserRepository {
         .selfSigned;
 
     Account account = Account(client);
+
     try {
       Response<dynamic> result = await account.createSession(
         email: '$email',
         password: '$password',
       );
+
       if (result.statusCode == 201) {
         return true;
       } else {
@@ -88,6 +139,7 @@ class UserRepository {
 
   Future<bool> isSignedIn() async {
     print('is signed in');
+
     String session = await getSession();
     print(session);
     if (session != null) {
@@ -108,7 +160,6 @@ class UserRepository {
       Response<dynamic> result = await account.getSessions();
       if (result.statusCode == 200) {
         sessionId = result.data[0]['\$id'];
-        print('sessionId');
       } else {
         sessionId = null;
       }
@@ -132,6 +183,7 @@ class UserRepository {
     try {
       Response<dynamic> result = await account.get();
       if (result.statusCode == 200) {
+        print(result.data);
         uid = result.data['registration'].toString();
       }
     } catch (error) {
@@ -173,7 +225,7 @@ class UserRepository {
         sessionId: '$session',
       );
 
-      result.then((response) {
+      result.then((response) async {
         print('logged out');
         print(response);
       }).catchError((error) {

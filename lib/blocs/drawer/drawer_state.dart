@@ -14,16 +14,23 @@ class DrawerLoadSuccess extends DrawerState {
   final int numPlanned;
   final int numMyDay;
   final int numTasks;
-  //Add user after creating User model
+  // final String email;
+  // final String name;
+  // final String phone;
 
-  const DrawerLoadSuccess(
-      this.numFavourite, this.numPlanned, this.numMyDay, this.numTasks);
+  const DrawerLoadSuccess(this.numFavourite, this.numPlanned, this.numMyDay,
+      this.numTasks, 
+      // this.email, this.name, this.phone
+      );
 
   @override
-  List<Object> get props => [numFavourite, numPlanned, numMyDay, numTasks];
+  List<Object> get props =>
+      [numFavourite, numPlanned, numMyDay, numTasks, 
+      // email, name, phone
+      ];
 
   @override
   String toString() {
-    return 'DrawerLoadSuccess {numFavourite: $numFavourite, numPlanned: $numPlanned, numMyDay: $numMyDay, numTasks: $numTasks}';
+    return 'DrawerLoadSuccess {numFavourite: $numFavourite, numPlanned: $numPlanned, numMyDay: $numMyDay, numTasks: $numTasks, "}';
   }
 }

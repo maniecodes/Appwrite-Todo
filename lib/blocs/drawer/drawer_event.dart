@@ -6,9 +6,12 @@ abstract class DrawerEvent extends Equatable {
 
 class DrawerUpdated extends DrawerEvent {
   final List<Task> tasks;
+
   // final DrawerTab tab;
 
-  const DrawerUpdated(this.tasks);
+  const DrawerUpdated(
+    this.tasks,
+  );
 
   @override
   List<Object> get props => [tasks];
