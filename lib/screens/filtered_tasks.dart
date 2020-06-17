@@ -1,10 +1,8 @@
-import 'package:appwrite_project/blocs/filtered_tasks/filtered_tasks_bloc.dart';
-import 'package:appwrite_project/blocs/tasks/tasks_bloc.dart';
-import 'package:appwrite_project/utils/keys.dart';
-import 'package:appwrite_project/widgets/delete_task_snack.dart';
-import 'package:appwrite_project/widgets/task_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../blocs/blocs.dart';
+import '../utils/utils.dart';
+import '../widgets/widgets.dart';
 
 class FilteredTasks extends StatelessWidget {
   FilteredTasks({Key key}) : super(key: key);

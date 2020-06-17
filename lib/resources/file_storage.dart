@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:appwrite_project/models/models.dart';
+import '../models/models.dart';
 
 /// Loads and saves a List of Tasks using a text file stored on the device.
 ///

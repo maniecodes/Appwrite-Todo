@@ -1,4 +1,4 @@
-import 'package:appwrite_project/models/models.dart';
+import '../models/models.dart';
 
 class WebClient {
   final Duration delay;

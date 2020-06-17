@@ -1,5 +1,4 @@
-
-import 'package:appwrite_project/models/models.dart';
+import '../models/models.dart';
 
 /// A data layer class works with reactive data sources, such as Firebase. This
 /// class emits a Stream of TaskEntities. The data layer of the app.

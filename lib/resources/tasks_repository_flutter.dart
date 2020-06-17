@@ -1,7 +1,7 @@
-import 'package:appwrite_project/models/models.dart';
 import 'package:flutter/material.dart';
 
 import '../resources/repository.dart';
+import '../models/models.dart';
 
 /// A class that glues together our local file storage and web client. It has a
 /// clear responsibility: Load Todos and Persist todos.

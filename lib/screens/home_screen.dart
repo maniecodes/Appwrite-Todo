@@ -1,15 +1,13 @@
-import 'package:appwrite_project/blocs/tasks/tasks_bloc.dart';
-import 'package:appwrite_project/screens/filtered_tasks.dart';
-import 'package:appwrite_project/utils/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../widgets/app_drawer.dart';
+import '../widgets/widgets.dart';
+import '../screens/screens.dart';
+import '../utils/utils.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     // backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('Home'),
       ),

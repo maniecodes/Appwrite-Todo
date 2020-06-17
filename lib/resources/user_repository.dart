@@ -1,6 +1,5 @@
 import 'package:appwrite/appwrite.dart';
-import 'package:appwrite_project/models/task_entity.dart';
-import 'package:appwrite_project/models/user_entity.dart';
+import '../models/models.dart';
 
 class UserRepository {
   Client client = Client(selfSigned: true);
