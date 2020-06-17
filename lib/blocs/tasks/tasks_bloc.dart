@@ -39,7 +39,6 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
   }
 
   Stream<TasksState> _mapTaskAddedToState(TaskAdded event) async* {
-    print('add task to state');
     if (state is TasksLoadSuccess) {
       //final tasks = await this.tasksRepository.loadTasks();
       final List<Task> updatedTaskss =
@@ -58,6 +57,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       }).toList();
       yield TasksLoadSuccess(updatedTasks);
       _saveTasksToLocal(event.task);
+      _saveTasksToAppwrite(event.task);
     }
   }
 

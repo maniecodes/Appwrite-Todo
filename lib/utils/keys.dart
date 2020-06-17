@@ -43,8 +43,8 @@ class TasksKeys {
   static const deleteTaskButton = Key('__deleteTaskFab__');
   static const taskDetailsScreen = Key('__taskDetailsScreen__');
   static final detailsTaskItemCheckbox = Key('DetailsTask__Checkbox');
-  static final detailsTaskItemTask = Key('DetailsTask__Task');
-  static final detailsTaskItemNote = Key('DetailsTask__Note');
+  static final detailsTaskItemTitle = Key('DetailsTask__Title');
+  static final detailsTaskItemDescription = Key('DetailsTask__Description');
 
   // Add Screen
   static const addTaskScreen = Key('__addTaskScreen__');
