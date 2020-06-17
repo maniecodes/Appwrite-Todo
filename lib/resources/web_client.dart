@@ -1,3 +1,8 @@
+import 'dart:convert';
+
+import 'package:appwrite/appwrite.dart';
+import 'package:appwrite/client.dart';
+
 import '../models/models.dart';
 
 class WebClient {
@@ -18,7 +23,26 @@ class WebClient {
             ]);
   }
 
-  Future<bool> postTasks(List<TaskEntity> tasks) async {
+  Future<bool> postTasks(TaskEntity task) async {
+    Client client = Client(selfSigned: true);
+    const API_ENDPOINT = "http://10.0.2.2/v1";
+    const PROJECT_ID = "5ee7c6be5d831";
+    const COLLECTION_ID = "5ee9f45b5d217";
+    client
+        .setEndpoint('$API_ENDPOINT/') // Your API Endpoint
+        .setProject('$PROJECT_ID') // Your project ID
+        .selfSigned;
+
+    Database database = Database(client);
+    try {
+      await database.createDocument(
+          collectionId: '$COLLECTION_ID',
+          data: json.encode(task.toJson()),
+          read: ['*'],
+          write: ['*']);
+    } catch (e) {
+      print(e.toString());
+    }
     return Future.value(true);
   }
 }

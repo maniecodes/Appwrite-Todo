@@ -23,6 +23,8 @@ class FileStorage {
         .map<TaskEntity>((task) => TaskEntity.fromJson(task))
         .toList();
 
+    print(tasks);
+
     return tasks;
   }
 
