@@ -1,3 +1,4 @@
+import 'package:appwrite_project/screens/task_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../blocs/blocs.dart';
@@ -29,8 +30,19 @@ class FilteredTasks extends StatelessWidget {
                       onUndo: () => BlocProvider.of<TasksBloc>(context)
                           .add(TaskAdded(task))));
                 },
-                onTap: () {
-                  print('got to tap');
+                onTap: () async {
+                  final removeTask = await Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (_) {
+                    return TaskDetailsScreen(id: task.id);
+                  }));
+                  if (removeTask != null) {
+                    Scaffold.of(context).showSnackBar(DeleteTaskSnackBar(
+                      key: TasksKeys.snackbar,
+                      task: task,
+                      onUndo: () => BlocProvider.of<TasksBloc>(context)
+                          .add(TaskAdded(task)),
+                    ));
+                  }
                 },
                 onCheckboxChanged: (_) {
                   BlocProvider.of<TasksBloc>(context).add(

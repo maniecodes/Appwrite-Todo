@@ -102,9 +102,6 @@ class TaskApp extends StatelessWidget {
           return AddEditTaskScreen(
               key: TasksKeys.addTaskScreen,
               onSave: (title, description) {
-                print('main dart');
-                print(title);
-                print(description);
                 BlocProvider.of<TasksBloc>(context)
                     .add(TaskAdded(Task(title, description: description)));
               },
