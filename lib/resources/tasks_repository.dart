@@ -12,5 +12,9 @@ abstract class TaskRepository {
   /// error, it attempts to load the Todos from a Web Client.
   Future<List<TaskEntity>> loadTasks();
 
-  Future saveTasks(TaskEntity tasks);
+  Future saveTasksToLocal(TaskEntity tasks);
+
+  Future saveTasksToAppwrite(TaskEntity tasks);
+
+  Future deleteTasksFromAppwrite(String taskId);
 }

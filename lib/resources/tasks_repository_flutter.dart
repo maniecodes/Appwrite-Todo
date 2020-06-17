@@ -29,9 +29,19 @@ class TasksRepositoryFlutter implements TaskRepository {
 
   // Persists tasks to local disk and the web
   @override
-  Future saveTasks(TaskEntity task) async {
+  Future saveTasksToLocal(TaskEntity task) async {
     final tasks = await fileStorage.loadTasks();
-    return Future.wait<dynamic>(
-        [fileStorage.saveTasks(tasks..add(task)), webClient.postTasks(task)]);
+    return Future.wait<dynamic>([fileStorage.saveTasks(tasks..add(task))]);
+  }
+
+  @override
+  Future saveTasksToAppwrite(TaskEntity task) async {
+    return Future.wait<dynamic>([webClient.postTasks(task)]);
+  }
+
+  @override
+  Future deleteTasksFromAppwrite(String taskId) async {
+    print('task repository delete $taskId');
+    return Future.wait<dynamic>([webClient.deleteTasks(taskId)]);
   }
 }
