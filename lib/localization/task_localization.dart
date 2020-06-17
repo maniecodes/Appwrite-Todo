@@ -17,8 +17,7 @@ class TaskLocalizations {
   }
 
   static TaskLocalizations of(BuildContext context) {
-    return Localizations.of<TaskLocalizations>(
-        context, TaskLocalizations);
+    return Localizations.of<TaskLocalizations>(context, TaskLocalizations);
   }
 
   String get tasks => Intl.message(
@@ -56,9 +55,9 @@ class TaskLocalizations {
         locale: locale.toString(),
       );
 
-  String get newTaskHint => Intl.message(
+  String get newTitleHint => Intl.message(
         'What needs to be done?',
-        name: 'newTaskHint',
+        name: 'newTitleHint',
         args: [],
         locale: locale.toString(),
       );
@@ -133,9 +132,9 @@ class TaskLocalizations {
         locale: locale.toString(),
       );
 
-  String get notesHint => Intl.message(
+  String get descriptionHint => Intl.message(
         'Additional Notes...',
-        name: 'notesHint',
+        name: 'descriptionHint',
         args: [],
         locale: locale.toString(),
       );

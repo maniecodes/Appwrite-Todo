@@ -9,7 +9,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       // backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Home'),
+        title: Text(FlutterBlocLocalizations.of(context).appTitle)
       ),
       drawer: AppDrawer(),
       body: FilteredTasks(),

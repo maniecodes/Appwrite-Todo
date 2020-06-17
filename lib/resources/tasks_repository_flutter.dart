@@ -22,7 +22,6 @@ class TasksRepositoryFlutter implements TaskRepository {
       return await fileStorage.loadTasks();
     } catch (e) {
       final tasks = await webClient.fetchTasks();
-      //TODO:: uncomment this line
       fileStorage.saveTasks(tasks);
       return tasks;
     }

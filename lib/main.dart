@@ -1,4 +1,7 @@
 import 'package:appwrite_project/blocs/filtered_tasks/filtered_tasks_bloc.dart';
+import 'package:appwrite_project/localization/task_localization.dart';
+import 'package:appwrite_project/models/task.dart';
+import 'package:appwrite_project/screens/add_edit_task_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,7 +64,12 @@ class TaskApp extends StatelessWidget {
           AppTheme.isLightTheme ? Brightness.dark : Brightness.light,
     ));
     return MaterialApp(
+      title: FlutterBlocLocalizations().appTitle,
       theme: AppTheme.getTheme(),
+      localizationsDelegates: [
+        TaskLocalizationsDelegate(),
+        FlutterBlocLocalizationsDelegate(),
+      ],
       routes: {
         TaskRoutes.home: (context) {
           return BlocBuilder<AuthenticationBloc, AuthenticationState>(
@@ -91,7 +99,16 @@ class TaskApp extends StatelessWidget {
           );
         },
         TaskRoutes.addTask: (context) {
-          return;
+          return AddEditTaskScreen(
+              key: TasksKeys.addTaskScreen,
+              onSave: (title, description) {
+                print('main dart');
+                print(title);
+                print(description);
+                BlocProvider.of<TasksBloc>(context)
+                    .add(TaskAdded(Task(title, description: description)));
+              },
+              isEditing: false);
         }
       },
     );

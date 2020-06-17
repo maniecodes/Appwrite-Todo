@@ -49,8 +49,8 @@ class TasksKeys {
   // Add Screen
   static const addTaskScreen = Key('__addTaskScreen__');
   static const saveNewTask = Key('__saveNewTask__');
-  static const taskField = Key('__taskField__');
-  static const noteField = Key('__noteField__');
+  static const titleField = Key('__titleField__');
+  static const descriptionField = Key('__descriptionField__');
 
   // Edit Screen
   static const editTaskScreen = Key('__editTaskScreen__');
