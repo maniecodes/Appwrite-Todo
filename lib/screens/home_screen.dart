@@ -14,6 +14,7 @@ class HomeScreen extends StatelessWidget {
       drawer: AppDrawer(),
       body: FilteredTasks(),
       floatingActionButton: FloatingActionButton(
+        key: TasksKeys.addTaskFab,
         onPressed: () {
           Navigator.pushNamed(context, TaskRoutes.addTask);
         },

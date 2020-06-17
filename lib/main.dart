@@ -89,6 +89,9 @@ class TaskApp extends StatelessWidget {
               return SplashScreen();
             },
           );
+        },
+        TaskRoutes.addTask: (context) {
+          return;
         }
       },
     );
