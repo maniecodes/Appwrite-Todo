@@ -44,4 +44,9 @@ class TasksRepositoryFlutter implements TaskRepository {
     print('task repository delete $taskId');
     return Future.wait<dynamic>([webClient.deleteTasks(taskId)]);
   }
+
+  @override
+  Future updateTasksOnAppwrite(String taskId, TaskEntity task) async {
+    return Future.wait<dynamic>([webClient.updateTasks(taskId, task)]);
+  }
 }

@@ -57,7 +57,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       }).toList();
       yield TasksLoadSuccess(updatedTasks);
       _saveTasksToLocal(event.task);
-      _saveTasksToAppwrite(event.task);
+      _updateTasksOnAppwrite(event.task.id, event.task);
     }
   }
 
@@ -86,5 +86,9 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
   Future _deleteTasksFromAppwrite(String taskId) {
     print('delete taks from appwrite: $taskId');
     return tasksRepository.deleteTasksFromAppwrite(taskId);
+  }
+
+  Future _updateTasksOnAppwrite(String taskId, Task tasks) {
+    return tasksRepository.updateTasksOnAppwrite(taskId, tasks.toEntity());
   }
 }
