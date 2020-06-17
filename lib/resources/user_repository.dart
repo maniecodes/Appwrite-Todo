@@ -1,6 +1,6 @@
 import 'package:appwrite/appwrite.dart';
+import 'package:appwrite_project/models/task_entity.dart';
 import 'package:appwrite_project/models/user_entity.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class UserRepository {
   Client client = Client(selfSigned: true);
@@ -50,6 +50,7 @@ class UserRepository {
   }
 
   Future saveUserDetails(String email, String name, String phone) async {
+    final userID = await currentUser();
     client
         .setEndpoint('$API_ENDPOINT/') // Your API Endpoint
         .setProject('$PROJECT_ID') // Your project ID
@@ -60,7 +61,7 @@ class UserRepository {
     try {
       await database.createDocument(
           collectionId: '$COLLECTION_ID',
-          data: {'email': email, 'name': name, 'phone': phone},
+          data: {'uid': userID, 'email': email, 'name': name, 'phone': phone},
           read: ['*'],
           write: ['*']);
       // return result.data;
@@ -70,27 +71,28 @@ class UserRepository {
   }
 
   Future<UserEntity> getUserInfo() async {
-    final sessionID = currentUser();
+    final userID = await currentUser();
+    Map<String, dynamic> json = {};
+    print(userID);
+    print('i got inside here');
+
+    client
+        .setEndpoint('$API_ENDPOINT/') // Your API Endpoint
+        .setProject('$PROJECT_ID') // Your project ID
+        .selfSigned;
 
     Database database = Database(client);
 
-    client
-            .setEndpoint(
-                '$API_ENDPOINT/database/collections/$COLLECTION_ID/documents') // Your API Endpoint
-            .setProject('$PROJECT_ID') // Your project ID
-        ;
-
-    Future result = database.listDocuments(
-      collectionId: '[$COLLECTION_ID]',
-      filters: ['uid = $sessionID'],
-    );
-
-    result.then((response) {
-      print('getuserinfo');
-      print(response);
-    }).catchError((error) {
-      print(error.response);
-    });
+    try {
+      Response<dynamic> result = await database.listDocuments(
+          collectionId: '$COLLECTION_ID', filters: ['uid=$userID']);
+      json = result.data['documents'][0];
+      return UserEntity.fromJson(json);
+    } catch (e) {
+      print(e.toString());
+      //TODO:: display error instead
+      return UserEntity.fromJson(json);
+    }
   }
 
   Future<bool> createUserSession(String email, String password) async {
@@ -183,7 +185,7 @@ class UserRepository {
     try {
       Response<dynamic> result = await account.get();
       if (result.statusCode == 200) {
-        print(result.data);
+        // print(result.data);
         uid = result.data['registration'].toString();
       }
     } catch (error) {
@@ -204,7 +206,7 @@ class UserRepository {
     if (errorMessage != null) {
       return Future.error(errorMessage);
     }
-    print(uid);
+    // print(uid);
     return uid;
   }
 

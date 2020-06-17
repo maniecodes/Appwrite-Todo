@@ -18,7 +18,9 @@ class DrawerBloc extends Bloc<DrawerEvent, DrawerState> {
   // final DrawerTab drawerTab;
   StreamSubscription tasksSubscription;
 
-  DrawerBloc({@required this.tasksBloc, this.userRepository}) {
+  DrawerBloc({@required this.tasksBloc, this.userRepository})
+      : assert(tasksBloc != null),
+        assert(userRepository != null) {
     tasksSubscription = tasksBloc.listen((state) {
       if (state is TasksLoadSuccess) {
         add(DrawerUpdated(state.tasks));
@@ -32,23 +34,24 @@ class DrawerBloc extends Bloc<DrawerEvent, DrawerState> {
   @override
   Stream<DrawerState> mapEventToState(DrawerEvent event) async* {
     if (event is DrawerUpdated) {
-      //await this.userRepository.getUserInfo();
-      // final email = users.email;
-      // final name = users.name;
-      // final phone = users.phone;
+      try {
+        final users = await userRepository.getUserInfo();
+        final email = users.email;
+        final name = users.name;
+        final phone = users.phone;
 
-      print('inside here');
-      // int numFavourite =
-      //     event.tasks.where((task) => !task.favourite).toList().length;
-      // int numTasks = event.tasks.length;
-      int numFavourite = 15;
-      int numTasks = 10;
-      int numPlanned = 23;
-      int numMyDay = 5;
-      yield DrawerLoadSuccess(
-        numFavourite, numPlanned, numMyDay, numTasks,
-        // email, name, phone
-      );
+        // int numFavourite =
+        //     event.tasks.where((task) => !task.favourite).toList().length;
+        // int numTasks = event.tasks.length;
+        int numFavourite = 15;
+        int numTasks = 10;
+        int numPlanned = 23;
+        int numMyDay = 5;
+        yield DrawerLoadSuccess(
+            numFavourite, numPlanned, numMyDay, numTasks, email, name, phone);
+      } catch (e) {
+        print(e.toString());
+      }
     }
   }
 

@@ -71,7 +71,8 @@ class TaskApp extends StatelessWidget {
                 return MultiBlocProvider(providers: [
                   BlocProvider<DrawerBloc>(
                     create: (context) => DrawerBloc(
-                        tasksBloc: BlocProvider.of<TasksBloc>(context)),
+                        tasksBloc: BlocProvider.of<TasksBloc>(context),
+                        userRepository: _userRepository),
                   ),
                   BlocProvider<FilteredTasksBloc>(
                     create: (context) => FilteredTasksBloc(

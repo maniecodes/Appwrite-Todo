@@ -11,13 +11,15 @@ class AppDrawer extends StatelessWidget {
         return CircularProgressIndicator();
       }
       final numFavourite = (state as DrawerLoadSuccess).numFavourite;
+      final email = (state as DrawerLoadSuccess).email;
+      final name = (state as DrawerLoadSuccess).name;
       print(numFavourite);
       return Drawer(
         child: Column(
           children: <Widget>[
             UserAccountsDrawerHeader(
-              accountName: Text('Manasseh Abiodun'),
-              accountEmail: Text('manassehl9@gmail.com'),
+              accountName: Text('$name'),
+              accountEmail: Text('$email'),
               currentAccountPicture: CircleAvatar(
                 backgroundColor: Colors.white,
               ),
