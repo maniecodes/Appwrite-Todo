@@ -1,7 +1,3 @@
-import 'package:appwrite_project/blocs/filtered_tasks/filtered_tasks_bloc.dart';
-import 'package:appwrite_project/localization/task_localization.dart';
-import 'package:appwrite_project/models/task.dart';
-import 'package:appwrite_project/screens/add_edit_task_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,10 +7,18 @@ import './utils/utils.dart';
 import './authentication/authentication.dart';
 import './blocs/blocs.dart';
 import './resources/repository.dart';
+import './models/models.dart';
+import './localization/task_localization.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   final UserRepository userRepository = UserRepository();
+  final TasksRepositoryFlutter taskRepository = TasksRepositoryFlutter(
+    fileStorage: const FileStorage(
+      '__task_app__',
+      getApplicationDocumentsDirectory,
+    ),
+  );
   BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(MultiBlocProvider(
     providers: [
@@ -26,16 +30,14 @@ void main() {
       ),
       BlocProvider(create: (context) {
         return TasksBloc(
-          tasksRepository: const TasksRepositoryFlutter(
-            fileStorage: const FileStorage(
-              '__task_app__',
-              getApplicationDocumentsDirectory,
-            ),
-          ),
+          tasksRepository: taskRepository,
         )..add(TasksLoaded());
       })
     ],
-    child: TaskApp(userRepository: userRepository),
+    child: TaskApp(
+      userRepository: userRepository,
+      taskRepository: taskRepository,
+    ),
   ));
 
   // child: TaskApp(userRepository: userRepository),
@@ -43,10 +45,15 @@ void main() {
 
 class TaskApp extends StatelessWidget {
   final UserRepository _userRepository;
+  final TasksRepositoryFlutter _tasksRepository;
 
-  TaskApp({Key key, @required UserRepository userRepository})
+  TaskApp(
+      {Key key,
+      @required UserRepository userRepository,
+      @required taskRepository})
       : assert(userRepository != null),
         _userRepository = userRepository,
+        _tasksRepository = taskRepository,
         super(key: key);
 
   @override
@@ -84,7 +91,8 @@ class TaskApp extends StatelessWidget {
                   ),
                   BlocProvider<FilteredTasksBloc>(
                     create: (context) => FilteredTasksBloc(
-                        tasksBloc: BlocProvider.of<TasksBloc>(context)),
+                        tasksBloc: BlocProvider.of<TasksBloc>(context),
+                        tasksRepository: _tasksRepository),
                   )
                 ], child: HomeScreen());
               }
@@ -92,18 +100,21 @@ class TaskApp extends StatelessWidget {
                 return WelcomeScreen(userRepository: _userRepository);
               }
               if (state is AuthenticationLoading) {
+                print('hr');
                 return SplashScreen();
               }
-              return SplashScreen();
+              print('ouy');
+              return WelcomeScreen(userRepository: _userRepository);
             },
           );
         },
         TaskRoutes.addTask: (context) {
           return AddEditTaskScreen(
               key: TasksKeys.addTaskScreen,
-              onSave: (title, description) {
-                BlocProvider.of<TasksBloc>(context)
-                    .add(TaskAdded(Task(title, description: description)));
+              onSave: (title, description) async {
+                BlocProvider.of<TasksBloc>(context).add(TaskAdded(Task(title,
+                    description: description,
+                    uid: await _userRepository.currentUser())));
               },
               isEditing: false);
         }

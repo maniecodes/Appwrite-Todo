@@ -6,32 +6,85 @@ import 'package:appwrite/client.dart';
 import '../models/models.dart';
 
 class WebClient {
-  final Duration delay;
+  // static const API_ENDPOINT = "http://127.0.0.1/v1";
+  static const API_ENDPOINT = "http://10.0.2.2/v1";
+  static const PROJECT_ID = "5eeafe5ee3d2c";
+  static const COLLECTION_ID = "5eeb001ebd987";
 
-  const WebClient({this.delay = const Duration(microseconds: 3000)});
+  const WebClient();
 
-  Future<List<TaskEntity>> fetchTasks() async {
-    print('fetching tasks');
-    return Future.delayed(
-        delay,
-        () => [
-              TaskEntity(true, true, '1', 'Need to go on Vacation', 'Task'),
-              TaskEntity(false, true, '2', 'Global news', 'News'),
-              TaskEntity(true, false, '4', 'Flycash', 'Testing Flycash'),
-              TaskEntity(false, false, '5', 'Appwrite', 'description'),
-              TaskEntity(false, true, '6', 'Sample', 'Test'),
-            ]);
+  //TODO::: try to remove this function as it is a duplicate of current user in user_repository.dart
+  Future<String> getCurrentUser() async {
+    String uid;
+    String errorMessage;
+    Client client = Client(selfSigned: true);
+    client
+            .setEndpoint(API_ENDPOINT) // Your API Endpoint
+            .setProject(PROJECT_ID) // Your project ID
+        ;
+    Account account = Account(client);
+    try {
+      Response<dynamic> result = await account.get();
+      if (result.statusCode == 200) {
+        uid = result.data['registration'].toString();
+        print('current user id: $uid');
+      }
+    } catch (error) {
+      switch (error.response.data['code'].toString()) {
+        case "429":
+          errorMessage = "Too may request. Try again later";
+          break;
+        case "409":
+          errorMessage = "Account Already Exists";
+          break;
+        case "401":
+          errorMessage = "Unauthorized user";
+          break;
+        default:
+          errorMessage = "Something went wrong";
+      }
+    }
+    if (errorMessage != null) {
+      return Future.error(errorMessage);
+    }
+    // print(uid);
+    return uid;
+  }
+
+  Future<List<TaskEntity>> fetchTasks(String userId) async {
+    print('got inside here');
+    // final userID = await getCurrentUser();
+    // print(userID);
+    Client client = Client(selfSigned: true);
+    client
+            .setEndpoint(API_ENDPOINT) // Your API Endpoint
+            .setProject(PROJECT_ID) // Your project ID
+        ;
+    Database database = Database(client);
+
+    try {
+      Response<dynamic> result = await database
+          .listDocuments(collectionId: COLLECTION_ID, filters: ['uid=$userId']);
+      final json = result.data['documents'];
+      final tasks =
+          (json).map<TaskEntity>((task) => TaskEntity.fromJson(task)).toList();
+
+      print('fetching task list.....');
+      print(json);
+      return tasks;
+    } catch (e) {
+      print(e.toString());
+      //TODO:: display error instead
+      // return TaskEntity.fromJson(json);
+    }
   }
 
   Future<bool> postTasks(TaskEntity task) async {
     Client client = Client(selfSigned: true);
-    const API_ENDPOINT = "http://10.0.2.2/v1/";
-    const PROJECT_ID = "5ee7c6be5d831";
-    const COLLECTION_ID = "5ee9f45b5d217";
     client
-        .setEndpoint(API_ENDPOINT) // Your API Endpoint
-        .setProject(PROJECT_ID) // Your project ID
-        .selfSigned;
+            .setEndpoint(API_ENDPOINT) // Your API Endpoint
+            .setProject(PROJECT_ID) // Your project ID
+        ;
 
     Database database = Database(client);
     try {
@@ -47,17 +100,14 @@ class WebClient {
   }
 
   Future<bool> deleteTasks(String taskId) async {
-    String documentId = await getDocumentID(taskId);
     Client client = Client(selfSigned: true);
-    const API_ENDPOINT = "http://10.0.2.2/v1/";
-    const PROJECT_ID = "5ee7c6be5d831";
-    const COLLECTION_ID = "5ee9f45b5d217";
     client
-        .setEndpoint(API_ENDPOINT) // Your API Endpoint
-        .setProject(PROJECT_ID) // Your project ID
-        .selfSigned;
+            .setEndpoint(API_ENDPOINT) // Your API Endpoint
+            .setProject(PROJECT_ID) // Your project ID
+        ;
 
     Database database = Database(client);
+    String documentId = await getDocumentID(taskId);
 
     try {
       await database.deleteDocument(
@@ -70,16 +120,12 @@ class WebClient {
   }
 
   Future<bool> updateTasks(String taskId, TaskEntity task) async {
-    String documentId = await getDocumentID(taskId);
     Client client = Client(selfSigned: true);
-    const API_ENDPOINT = "http://10.0.2.2/v1/";
-    const PROJECT_ID = "5ee7c6be5d831";
-    const COLLECTION_ID = "5ee9f45b5d217";
     client
-        .setEndpoint(API_ENDPOINT) // Your API Endpoint
-        .setProject(PROJECT_ID) // Your project ID
-        .selfSigned;
-
+            .setEndpoint(API_ENDPOINT) // Your API Endpoint
+            .setProject(PROJECT_ID) // Your project ID
+        ;
+    String documentId = await getDocumentID(taskId);
     Database database = Database(client);
     try {
       Response<dynamic> result = await database.updateDocument(
@@ -100,13 +146,10 @@ class WebClient {
     String documentId;
 
     Client client = Client(selfSigned: true);
-    const API_ENDPOINT = "http://10.0.2.2/v1/";
-    const PROJECT_ID = "5ee7c6be5d831";
-    const COLLECTION_ID = "5ee9f45b5d217";
     client
-        .setEndpoint(API_ENDPOINT) // Your API Endpoint
-        .setProject(PROJECT_ID) // Your project ID
-        .selfSigned;
+            .setEndpoint(API_ENDPOINT) // Your API Endpoint
+            .setProject(PROJECT_ID) // Your project ID
+        ;
 
     Database database = Database(client);
 

@@ -15,15 +15,16 @@ class FileStorage {
 
   const FileStorage(this.tag, this.getDirectory);
 
-  Future<List<TaskEntity>> loadTasks() async {
+  Future<List<TaskEntity>> loadTasks(userId) async {
     final file = await _getLocalFile();
     final string = await file.readAsString();
     final json = JsonDecoder().convert(string);
+    print('what is loadin local');
+    print(json);
     final tasks = (json['tasks'])
         .map<TaskEntity>((task) => TaskEntity.fromJson(task))
+        .where((task) => task.uid == userId)
         .toList();
-
-    print(tasks);
 
     return tasks;
   }

@@ -6,3 +6,4 @@ export './welcome_screen.dart';
 export './registration.dart';
 export './registration_screen.dart';
 export './filtered_tasks.dart';
+export './add_edit_task_screen.dart';

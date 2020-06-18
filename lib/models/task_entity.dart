@@ -4,9 +4,10 @@ class TaskEntity {
   final String id;
   final String title;
   final String description;
+  final String uid;
 
-  TaskEntity(
-      this.complete, this.favourite, this.id, this.title, this.description);
+  TaskEntity(this.complete, this.favourite, this.id, this.title,
+      this.description, this.uid);
 
   @override
   int get hashCode =>
@@ -14,6 +15,7 @@ class TaskEntity {
       favourite.hashCode ^
       title.hashCode ^
       description.hashCode ^
+      uid.hashCode ^
       id.hashCode;
 
   @override
@@ -25,6 +27,7 @@ class TaskEntity {
           favourite == other.favourite &&
           title == other.title &&
           description == other.description &&
+          uid == other.uid &&
           id == other.id;
 
   Map<String, Object> toJson() {
@@ -33,13 +36,14 @@ class TaskEntity {
       'favourite': favourite,
       'title': title,
       'description': description,
+      'uid': uid,
       'id': id,
     };
   }
 
   @override
   String toString() {
-    return 'TaskEntity{complete: $complete, favourite: $favourite, title: $title, description: $description, id: $id}';
+    return 'TaskEntity{complete: $complete, favourite: $favourite, title: $title, description: $description, uid: $uid, id: $id}';
   }
 
   static TaskEntity fromJson(Map<String, Object> json) {
@@ -48,6 +52,7 @@ class TaskEntity {
         json['favourite'] as bool,
         json['id'] as String,
         json['title'] as String,
-        json['description'] as String);
+        json['description'] as String,
+        json['uid'] as String);
   }
 }

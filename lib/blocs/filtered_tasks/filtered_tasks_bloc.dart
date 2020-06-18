@@ -3,9 +3,9 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
-import 'package:appwrite_project/blocs/tasks/tasks_bloc.dart';
-import 'package:appwrite_project/models/task.dart';
-import 'package:appwrite_project/models/visibility_filter.dart';
+import '../../blocs/blocs.dart';
+import '../../models/models.dart';
+import '../../resources/repository.dart';
 
 part 'filtered_tasks_event.dart';
 part 'filtered_tasks_state.dart';
@@ -13,8 +13,10 @@ part 'filtered_tasks_state.dart';
 class FilteredTasksBloc extends Bloc<FilteredTasksEvent, FilteredTasksState> {
   final TasksBloc tasksBloc;
   StreamSubscription tasksSubscription;
+  final TasksRepositoryFlutter tasksRepository;
 
-  FilteredTasksBloc({@required this.tasksBloc}) {
+  FilteredTasksBloc(
+      {@required this.tasksBloc, @required this.tasksRepository}) {
     tasksSubscription = tasksBloc.listen((state) {
       if (state is TasksLoadSuccess) {
         add(TasksUpdated((tasksBloc.state as TasksLoadSuccess).tasks));
@@ -59,12 +61,14 @@ class FilteredTasksBloc extends Bloc<FilteredTasksEvent, FilteredTasksState> {
   Stream<FilteredTasksState> _mapTasksUpdatedToState(
     TasksUpdated event,
   ) async* {
+    final tasks = await this.tasksRepository.loadTasks();
+
     final visibilityFilter = state is FilteredTasksLoadSuccess
         ? (state as FilteredTasksLoadSuccess).activeFilter
         : VisibilityFilter.all;
     yield FilteredTasksLoadSuccess(
       _mapTasksToFilteredTasks(
-        (tasksBloc.state as TasksLoadSuccess).tasks,
+        tasks.map(Task.fromEntity).toList(),
         visibilityFilter,
       ),
       visibilityFilter,

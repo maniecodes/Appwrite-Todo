@@ -3,9 +3,10 @@ import '../models/models.dart';
 
 class UserRepository {
   Client client = Client(selfSigned: true);
+  // static const API_ENDPOINT = "http://127.0.0.1/v1";
   static const API_ENDPOINT = "http://10.0.2.2/v1";
-  static const PROJECT_ID = "5ee7c6be5d831";
-  static const COLLECTION_ID = "5ee7f40c38388";
+  static const PROJECT_ID = "5eeafe5ee3d2c";
+  static const COLLECTION_ID = "5eeafe9b73454";
 
   // Signup a user and also create an account session.
   Future<String> signup(
@@ -13,8 +14,8 @@ class UserRepository {
     String uid;
     String errorMessage;
     client
-        .setEndpoint('$API_ENDPOINT/account') // Your API Endpoint
-        .setProject('$PROJECT_ID') // Your project ID
+        .setEndpoint(API_ENDPOINT) // Your API Endpoint
+        .setProject(PROJECT_ID) // Your project ID
         .selfSigned;
 
     Account account = Account(client);
@@ -51,15 +52,15 @@ class UserRepository {
   Future saveUserDetails(String email, String name, String phone) async {
     final userID = await currentUser();
     client
-        .setEndpoint('$API_ENDPOINT/') // Your API Endpoint
-        .setProject('$PROJECT_ID') // Your project ID
-        .selfSigned;
+            .setEndpoint(API_ENDPOINT) // Your API Endpoint
+            .setProject(PROJECT_ID) // Your project ID
+        ;
 
     Database database = Database(client);
 
     try {
       await database.createDocument(
-          collectionId: '$COLLECTION_ID',
+          collectionId: COLLECTION_ID,
           data: {'uid': userID, 'email': email, 'name': name, 'phone': phone},
           read: ['*'],
           write: ['*']);
@@ -71,21 +72,24 @@ class UserRepository {
 
   Future<UserEntity> getUserInfo() async {
     final userID = await currentUser();
-    Map<String, dynamic> json = {};
+    print('what is userID');
     print(userID);
-    print('i got inside here');
+    Map<String, dynamic> json = {};
 
     client
-        .setEndpoint('$API_ENDPOINT/') // Your API Endpoint
-        .setProject('$PROJECT_ID') // Your project ID
-        .selfSigned;
+            .setEndpoint(API_ENDPOINT) // Your API Endpoint
+            .setProject(PROJECT_ID) // Your project ID
+        ;
 
     Database database = Database(client);
 
     try {
-      Response<dynamic> result = await database.listDocuments(
-          collectionId: '$COLLECTION_ID', filters: ['uid=$userID']);
+      Response<dynamic> result = await database
+          .listDocuments(collectionId: COLLECTION_ID, filters: ['uid=$userID']);
+      // print(result.data);
+
       json = result.data['documents'][0];
+
       return UserEntity.fromJson(json);
     } catch (e) {
       print(e.toString());
@@ -98,25 +102,28 @@ class UserRepository {
     print('create user session');
     String errorMessage;
     client
-        .setEndpoint('$API_ENDPOINT/account/sessions') // Your API Endpoint
-        .setProject('$PROJECT_ID') // Your project ID
-        .selfSigned;
+            .setEndpoint(API_ENDPOINT) // Your API Endpoint
+            .setProject(PROJECT_ID) // Your project ID
+        ;
 
     Account account = Account(client);
 
     try {
       Response<dynamic> result = await account.createSession(
-        email: '$email',
-        password: '$password',
+        email: email,
+        password: password,
       );
-
+      print(result);
       if (result.statusCode == 201) {
+        print('cre');
         return true;
       } else {
         print('failed to create user session');
         return false;
       }
     } catch (error) {
+      print(error);
+
       switch (error.response.data['code'].toString()) {
         case "429":
           errorMessage = "Too may request. Try again later";
@@ -153,8 +160,8 @@ class UserRepository {
     print('get session id');
     String sessionId;
     client
-            .setEndpoint('$API_ENDPOINT/account/sessions') // Your API Endpoint
-            .setProject('$PROJECT_ID') // Your project ID
+            .setEndpoint(API_ENDPOINT) // Your API Endpoint
+            .setProject(PROJECT_ID) // Your project ID
         ;
     Account account = Account(client);
     try {
@@ -177,8 +184,8 @@ class UserRepository {
     String uid;
     String errorMessage;
     client
-            .setEndpoint('$API_ENDPOINT/account') // Your API Endpoint
-            .setProject('$PROJECT_ID') // Your project ID
+            .setEndpoint(API_ENDPOINT) // Your API Endpoint
+            .setProject(PROJECT_ID) // Your project ID
         ;
     Account account = Account(client);
     try {
@@ -186,6 +193,7 @@ class UserRepository {
       if (result.statusCode == 200) {
         // print(result.data);
         uid = result.data['registration'].toString();
+        print('current user id: $uid');
       }
     } catch (error) {
       switch (error.response.data['code'].toString()) {
@@ -217,13 +225,12 @@ class UserRepository {
       Account account = Account(client);
 
       client
-              .setEndpoint(
-                  '$API_ENDPOINT/account/sessions/$session') // Your API Endpoint
-              .setProject('$PROJECT_ID') // Your project ID
+              .setEndpoint(API_ENDPOINT) // Your API Endpoint
+              .setProject(PROJECT_ID) // Your project ID
           ;
 
       Future result = account.deleteSession(
-        sessionId: '$session',
+        sessionId: session,
       );
 
       result.then((response) async {

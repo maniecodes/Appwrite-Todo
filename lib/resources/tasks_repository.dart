@@ -17,4 +17,8 @@ abstract class TaskRepository {
   Future saveTasksToAppwrite(TaskEntity tasks);
 
   Future deleteTasksFromAppwrite(String taskId);
+
+  Future updateTasksOnAppwrite(String taskId, TaskEntity tasks);
+
+  Future getCurrentUser();
 }

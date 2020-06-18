@@ -18,19 +18,28 @@ class TasksRepositoryFlutter implements TaskRepository {
   /// error, it attempts to load the Todos from a Web Client.
   @override
   Future<List<TaskEntity>> loadTasks() async {
+    String userId = await getCurrentUser();
     try {
-      return await fileStorage.loadTasks();
+      return await fileStorage.loadTasks(userId);
+
+      //return await webClient.fetchTasks(userId);
     } catch (e) {
-      final tasks = await webClient.fetchTasks();
+      final tasks = await webClient.fetchTasks(userId);
       fileStorage.saveTasks(tasks);
       return tasks;
     }
   }
 
+  @override
+  Future getCurrentUser() async {
+    final userId = await webClient.getCurrentUser();
+    return userId;
+  }
+
   // Persists tasks to local disk and the web
   @override
   Future saveTasksToLocal(TaskEntity task) async {
-    final tasks = await fileStorage.loadTasks();
+    final tasks = await fileStorage.loadTasks(getCurrentUser());
     return Future.wait<dynamic>([fileStorage.saveTasks(tasks..add(task))]);
   }
 
