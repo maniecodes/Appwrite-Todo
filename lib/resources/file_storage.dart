@@ -19,8 +19,6 @@ class FileStorage {
     final file = await _getLocalFile();
     final string = await file.readAsString();
     final json = JsonDecoder().convert(string);
-    print('what is loadin local');
-    print(json);
     final tasks = (json['tasks'])
         .map<TaskEntity>((task) => TaskEntity.fromJson(task))
         .where((task) => task.uid == userId)

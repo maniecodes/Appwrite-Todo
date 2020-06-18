@@ -20,9 +20,9 @@ class TasksRepositoryFlutter implements TaskRepository {
   Future<List<TaskEntity>> loadTasks() async {
     String userId = await getCurrentUser();
     try {
-      return await fileStorage.loadTasks(userId);
+      //return await fileStorage.loadTasks(userId);
 
-      //return await webClient.fetchTasks(userId);
+      return await webClient.fetchTasks(userId);
     } catch (e) {
       final tasks = await webClient.fetchTasks(userId);
       fileStorage.saveTasks(tasks);
