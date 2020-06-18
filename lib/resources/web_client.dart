@@ -27,7 +27,6 @@ class WebClient {
       Response<dynamic> result = await account.get();
       if (result.statusCode == 200) {
         uid = result.data['registration'].toString();
-        print('current user id: $uid');
       }
     } catch (error) {
       switch (error.response.data['code'].toString()) {
@@ -47,14 +46,11 @@ class WebClient {
     if (errorMessage != null) {
       return Future.error(errorMessage);
     }
-    // print(uid);
     return uid;
   }
 
+  // Get task attached to a user.
   Future<List<TaskEntity>> fetchTasks(String userId) async {
-    print('got inside here');
-    // final userID = await getCurrentUser();
-    // print(userID);
     Client client = Client(selfSigned: true);
     client
             .setEndpoint(API_ENDPOINT) // Your API Endpoint
@@ -68,9 +64,6 @@ class WebClient {
       final json = result.data['documents'];
       final tasks =
           (json).map<TaskEntity>((task) => TaskEntity.fromJson(task)).toList();
-
-      print('fetching task list.....');
-      print(json);
       return tasks;
     } catch (e) {
       print(e.toString());
@@ -79,6 +72,7 @@ class WebClient {
     }
   }
 
+  // Save task into the database
   Future<bool> postTasks(TaskEntity task) async {
     Client client = Client(selfSigned: true);
     client
@@ -99,6 +93,7 @@ class WebClient {
     return Future.value(true);
   }
 
+  // Delete task from the database
   Future<bool> deleteTasks(String taskId) async {
     Client client = Client(selfSigned: true);
     client
@@ -119,6 +114,7 @@ class WebClient {
     return true;
   }
 
+  // Update a task on the database
   Future<bool> updateTasks(String taskId, TaskEntity task) async {
     Client client = Client(selfSigned: true);
     client
@@ -142,6 +138,7 @@ class WebClient {
     }
   }
 
+  // Get document id
   Future<String> getDocumentID(String taskId) async {
     String documentId;
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:path_provider/path_provider.dart';
 import './screens/screens.dart';
 import './utils/utils.dart';
 import './authentication/authentication.dart';
@@ -14,11 +13,11 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   final UserRepository userRepository = UserRepository();
   final TasksRepositoryFlutter taskRepository = TasksRepositoryFlutter(
-    fileStorage: const FileStorage(
-      '__task_app__',
-      getApplicationDocumentsDirectory,
-    ),
-  );
+      // fileStorage: const FileStorage(
+      //   '__task_app__',
+      //   getApplicationDocumentsDirectory,
+      // ),
+      );
   BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(MultiBlocProvider(
     providers: [
@@ -82,7 +81,6 @@ class TaskApp extends StatelessWidget {
           return BlocBuilder<AuthenticationBloc, AuthenticationState>(
             builder: (context, state) {
               if (state is AuthenticationAuthenticated) {
-                //return HomeScreen();
                 return MultiBlocProvider(providers: [
                   BlocProvider<DrawerBloc>(
                     create: (context) => DrawerBloc(
@@ -100,10 +98,8 @@ class TaskApp extends StatelessWidget {
                 return WelcomeScreen(userRepository: _userRepository);
               }
               if (state is AuthenticationLoading) {
-                print('hr');
                 return SplashScreen();
               }
-              print('ouy');
               return WelcomeScreen(userRepository: _userRepository);
             },
           );

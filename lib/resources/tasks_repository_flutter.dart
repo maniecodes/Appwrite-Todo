@@ -6,11 +6,11 @@ import '../models/models.dart';
 /// A class that glues together our local file storage and web client. It has a
 /// clear responsibility: Load Todos and Persist todos.
 class TasksRepositoryFlutter implements TaskRepository {
-  final FileStorage fileStorage;
+
   final WebClient webClient;
 
   const TasksRepositoryFlutter({
-    @required this.fileStorage,
+   
     this.webClient = const WebClient(),
   });
 
@@ -25,7 +25,7 @@ class TasksRepositoryFlutter implements TaskRepository {
       return await webClient.fetchTasks(userId);
     } catch (e) {
       final tasks = await webClient.fetchTasks(userId);
-      fileStorage.saveTasks(tasks);
+     // fileStorage.saveTasks(tasks);
       return tasks;
     }
   }
@@ -39,8 +39,8 @@ class TasksRepositoryFlutter implements TaskRepository {
   // Persists tasks to local disk and the web
   @override
   Future saveTasksToLocal(TaskEntity task) async {
-    final tasks = await fileStorage.loadTasks(getCurrentUser());
-    return Future.wait<dynamic>([fileStorage.saveTasks(tasks..add(task))]);
+    // final tasks = await fileStorage.loadTasks(getCurrentUser());
+    // return Future.wait<dynamic>([fileStorage.saveTasks(tasks..add(task))]);
   }
 
   @override

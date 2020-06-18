@@ -13,6 +13,7 @@ class UserRepository {
       {String email, String password, String name, String phone}) async {
     String uid;
     String errorMessage;
+
     client
         .setEndpoint(API_ENDPOINT) // Your API Endpoint
         .setProject(PROJECT_ID) // Your project ID
@@ -24,8 +25,10 @@ class UserRepository {
           email: '$email', password: '$password', name: '$name');
       uid = result.data['registration'].toString();
       if (uid != null) {
-        print('creating user session....');
+        //Create user session after succesfully signing up
         await createUserSession(email, password);
+
+        /// Save user [email, name, phone] to appwrite
         await saveUserDetails(email, name, phone);
       }
     } catch (error) {
@@ -49,7 +52,9 @@ class UserRepository {
     return uid;
   }
 
+  // Save User information into the database
   Future saveUserDetails(String email, String name, String phone) async {
+    // Get current logged in user ID
     final userID = await currentUser();
     client
             .setEndpoint(API_ENDPOINT) // Your API Endpoint
@@ -64,16 +69,16 @@ class UserRepository {
           data: {'uid': userID, 'email': email, 'name': name, 'phone': phone},
           read: ['*'],
           write: ['*']);
-      // return result.data;
     } catch (e) {
       print(e.toString());
     }
   }
 
+  // Get user information
   Future<UserEntity> getUserInfo() async {
+    // Get current logged in user ID
     final userID = await currentUser();
-    print('what is userID');
-    print(userID);
+
     Map<String, dynamic> json = {};
 
     client
@@ -86,7 +91,6 @@ class UserRepository {
     try {
       Response<dynamic> result = await database
           .listDocuments(collectionId: COLLECTION_ID, filters: ['uid=$userID']);
-      // print(result.data);
 
       json = result.data['documents'][0];
 
@@ -98,8 +102,8 @@ class UserRepository {
     }
   }
 
+  // Create user session after signup
   Future<bool> createUserSession(String email, String password) async {
-    print('create user session');
     String errorMessage;
     client
             .setEndpoint(API_ENDPOINT) // Your API Endpoint
@@ -145,19 +149,17 @@ class UserRepository {
     return false;
   }
 
+  // Check if user session is active.
   Future<bool> isSignedIn() async {
-    print('is signed in');
-
     String session = await getSession();
-    print(session);
     if (session != null) {
       return true;
     }
     return false;
   }
 
+  // Get current session
   Future<String> getSession() async {
-    print('get session id');
     String sessionId;
     client
             .setEndpoint(API_ENDPOINT) // Your API Endpoint
@@ -172,15 +174,13 @@ class UserRepository {
         sessionId = null;
       }
     } catch (error) {
-      //print('error in get session');
-      //print(error.toString());
       sessionId = null;
     }
     return sessionId;
   }
 
+  //get current user ID
   Future<String> currentUser() async {
-    print('got into current user');
     String uid;
     String errorMessage;
     client
@@ -191,9 +191,7 @@ class UserRepository {
     try {
       Response<dynamic> result = await account.get();
       if (result.statusCode == 200) {
-        // print(result.data);
         uid = result.data['registration'].toString();
-        print('current user id: $uid');
       }
     } catch (error) {
       switch (error.response.data['code'].toString()) {
@@ -217,8 +215,8 @@ class UserRepository {
     return uid;
   }
 
+  //Signout and end current session
   signOut() async {
-    print('loggin out');
     String session = await getSession();
     print(session);
     if (session != null) {

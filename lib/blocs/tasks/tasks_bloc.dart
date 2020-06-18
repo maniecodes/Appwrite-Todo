@@ -46,7 +46,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       final List<Task> updatedTaskss =
           List.from((state as TasksLoadSuccess).tasks)..add(event.task);
       yield TasksLoadSuccess(updatedTaskss);
-      _saveTasksToLocal(event.task);
+      //_saveTasksToLocal(event.task);
       _saveTasksToAppwrite(event.task);
     }
   }
@@ -58,7 +58,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
         return task.id == event.task.id ? event.task : task;
       }).toList();
       yield TasksLoadSuccess(updatedTasks);
-      _saveTasksToLocal(event.task);
+      //_saveTasksToLocal(event.task);
       _updateTasksOnAppwrite(event.task.id, event.task);
     }
   }
@@ -70,16 +70,14 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
           .where((task) => task.id != event.task.id)
           .toList();
       yield TasksLoadSuccess(updatedTasks);
-      _saveTasksToLocal(event.task);
-      print('map task deleted');
-      print(event.task.id);
+      //_saveTasksToLocal(event.task);
       _deleteTasksFromAppwrite(event.task.id);
     }
   }
 
-  Future _saveTasksToLocal(Task tasks) {
-    return tasksRepository.saveTasksToLocal(tasks.toEntity());
-  }
+  // Future _saveTasksToLocal(Task tasks) {
+  //   return tasksRepository.saveTasksToLocal(tasks.toEntity());
+  // }
 
   Future _saveTasksToAppwrite(Task tasks) {
     return tasksRepository.saveTasksToAppwrite(tasks.toEntity());
