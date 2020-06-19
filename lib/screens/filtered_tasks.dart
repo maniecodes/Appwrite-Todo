@@ -22,38 +22,42 @@ class FilteredTasks extends StatelessWidget {
             itemBuilder: (BuildContext context, int index) {
               final task = tasks[index];
               return TaskItem(
-                  task: task,
-                  onDismissed: (direction) {
-                    BlocProvider.of<TasksBloc>(context).add(TaskDeleted(task));
+                task: task,
+                onDismissed: (direction) {
+                  BlocProvider.of<TasksBloc>(context).add(TaskDeleted(task));
+                  Scaffold.of(context).showSnackBar(DeleteTaskSnackBar(
+                      task: task,
+                      onUndo: () => BlocProvider.of<TasksBloc>(context)
+                          .add(TaskAdded(task))));
+                },
+                onTap: () async {
+                  final removeTask = await Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (_) {
+                    return TaskDetailsScreen(id: task.id);
+                  }));
+                  if (removeTask != null) {
                     Scaffold.of(context).showSnackBar(DeleteTaskSnackBar(
-                        task: task,
-                        onUndo: () => BlocProvider.of<TasksBloc>(context)
-                            .add(TaskAdded(task))));
-                  },
-                  onTap: () async {
-                    final removeTask = await Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (_) {
-                      return TaskDetailsScreen(id: task.id);
-                    }));
-                    if (removeTask != null) {
-                      Scaffold.of(context).showSnackBar(DeleteTaskSnackBar(
-                        key: TasksKeys.snackbar,
-                        task: task,
-                        onUndo: () => BlocProvider.of<TasksBloc>(context)
-                            .add(TaskAdded(task)),
-                      ));
-                    }
-                  },
-                  onCheckboxChanged: (_) {
-                    BlocProvider.of<TasksBloc>(context).add(
-                      TaskUpdated(task.copyWith(complete: !task.complete)),
-                    );
-                  },
-                  onFavouriteSelected: (_) {
-                    BlocProvider.of<TasksBloc>(context).add(
-                      TaskUpdated(task.copyWith(favourite: !task.favourite)),
-                    );
-                  });
+                      key: TasksKeys.snackbar,
+                      task: task,
+                      onUndo: () => BlocProvider.of<TasksBloc>(context)
+                          .add(TaskAdded(task)),
+                    ));
+                  }
+                },
+                onCheckboxChanged: (_) {
+                  BlocProvider.of<TasksBloc>(context).add(
+                    TaskUpdated(task.copyWith(complete: !task.complete)),
+                  );
+                },
+                onFavouriteSelected: () {
+                  return task.favourite
+                      ? BlocProvider.of<TasksBloc>(context)
+                          .add(TaskUpdated(task.copyWith(favourite: false)))
+                      : BlocProvider.of<TasksBloc>(context).add(
+                          TaskUpdated(task.copyWith(favourite: true)),
+                        );
+                },
+              );
             },
           );
         } else {

@@ -130,11 +130,30 @@ class TaskDetailsScreen extends StatelessWidget {
                                             ),
                                             Row(
                                               children: <Widget>[
-                                                Icon(
-                                                  Icons.favorite_border,
-                                                  color: Colors.blue,
-                                                  size: 20.0,
-                                                ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    BlocProvider.of<TasksBloc>(
+                                                            context)
+                                                        .add(TaskUpdated(
+                                                            task.copyWith(
+                                                                favourite: !task
+                                                                    .favourite)));
+                                                  },
+                                                  child: Container(
+                                                    child: !task.favourite
+                                                        ? Icon(
+                                                            Icons
+                                                                .favorite_border,
+                                                            color: Colors.blue,
+                                                            size: 20.0,
+                                                          )
+                                                        : Icon(
+                                                            Icons.favorite,
+                                                            color: Colors.blue,
+                                                            size: 20.0,
+                                                          ),
+                                                  ),
+                                                )
                                               ],
                                             )
                                           ],

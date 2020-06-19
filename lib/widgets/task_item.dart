@@ -6,7 +6,7 @@ class TaskItem extends StatelessWidget {
   final DismissDirectionCallback onDismissed;
   final GestureDragCancelCallback onTap;
   final ValueChanged<bool> onCheckboxChanged;
-  final ValueChanged<bool> onFavouriteSelected;
+  final Function onFavouriteSelected;
   final Task task;
 
   TaskItem(
@@ -103,17 +103,22 @@ class TaskItem extends StatelessWidget {
                               ),
                               Row(
                                 children: <Widget>[
-                                  task.favourite
-                                      ? Icon(
-                                          Icons.favorite_border,
-                                          color: Colors.blue,
-                                          size: 20.0,
-                                        )
-                                      : Icon(
-                                          Icons.favorite,
-                                          color: Colors.blue,
-                                          size: 20.0,
-                                        ),
+                                  InkWell(
+                                    onTap: onFavouriteSelected,
+                                    child: Container(
+                                      child: !task.favourite
+                                          ? Icon(
+                                              Icons.favorite_border,
+                                              color: Colors.blue,
+                                              size: 20.0,
+                                            )
+                                          : Icon(
+                                              Icons.favorite,
+                                              color: Colors.blue,
+                                              size: 20.0,
+                                            ),
+                                    ),
+                                  )
                                 ],
                               )
                             ],
