@@ -18,12 +18,10 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
   @override
   Stream<TasksState> mapEventToState(TasksEvent event) async* {
     if (event is TasksLoaded) {
-      print('task loaded');
       yield* _mapTasksLoadedToState();
     } else if (event is TaskAdded) {
       yield* _mapTaskAddedToState(event);
     } else if (event is TaskUpdated) {
-      print('updating task');
       yield* _mapTaskUpdatedToState(event);
     } else if (event is TaskDeleted) {
       yield* _mapTaskDeletedToState(event);
@@ -42,42 +40,27 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
   Stream<TasksState> _mapTaskAddedToState(TaskAdded event) async* {
     if (state is TasksLoadSuccess) {
-      //final tasks = await this.tasksRepository.loadTasks();
-      final List<Task> updatedTaskss =
-          List.from((state as TasksLoadSuccess).tasks)..add(event.task);
-      yield TasksLoadSuccess(updatedTaskss);
-      //_saveTasksToLocal(event.task);
-      _saveTasksToAppwrite(event.task);
+      await _saveTasksToAppwrite(event.task);
+      final tasks = await this.tasksRepository.loadTasks();
+      yield TasksLoadSuccess(tasks.map(Task.fromEntity).toList());
     }
   }
 
   Stream<TasksState> _mapTaskUpdatedToState(TaskUpdated event) async* {
     if (state is TasksLoadSuccess) {
-      final List<Task> updatedTasks =
-          (state as TasksLoadSuccess).tasks.map((task) {
-        return task.id == event.task.id ? event.task : task;
-      }).toList();
-      yield TasksLoadSuccess(updatedTasks);
-      //_saveTasksToLocal(event.task);
-      _updateTasksOnAppwrite(event.task.id, event.task);
+      await _updateTasksOnAppwrite(event.task.id, event.task);
+      final tasks = await this.tasksRepository.loadTasks();
+      yield TasksLoadSuccess(tasks.map(Task.fromEntity).toList());
     }
   }
 
   Stream<TasksState> _mapTaskDeletedToState(TaskDeleted event) async* {
     if (state is TasksLoadSuccess) {
-      final updatedTasks = (state as TasksLoadSuccess)
-          .tasks
-          .where((task) => task.id != event.task.id)
-          .toList();
-      yield TasksLoadSuccess(updatedTasks);
-      //_saveTasksToLocal(event.task);
-      _deleteTasksFromAppwrite(event.task.id);
+      await _deleteTasksFromAppwrite(event.task.id);
+      final tasks = await this.tasksRepository.loadTasks();
+      yield TasksLoadSuccess(tasks.map(Task.fromEntity).toList());
     }
   }
-
-  // Future _saveTasksToLocal(Task tasks) {
-  //   return tasksRepository.saveTasksToLocal(tasks.toEntity());
-  // }
 
   Future _saveTasksToAppwrite(Task tasks) {
     return tasksRepository.saveTasksToAppwrite(tasks.toEntity());

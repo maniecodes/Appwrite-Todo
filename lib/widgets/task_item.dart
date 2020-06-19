@@ -6,6 +6,7 @@ class TaskItem extends StatelessWidget {
   final DismissDirectionCallback onDismissed;
   final GestureDragCancelCallback onTap;
   final ValueChanged<bool> onCheckboxChanged;
+  final ValueChanged<bool> onFavouriteSelected;
   final Task task;
 
   TaskItem(
@@ -13,6 +14,7 @@ class TaskItem extends StatelessWidget {
       @required this.onDismissed,
       @required this.onTap,
       @required this.onCheckboxChanged,
+      @required this.onFavouriteSelected,
       @required this.task})
       : super(key: key);
 
@@ -65,7 +67,7 @@ class TaskItem extends StatelessWidget {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Text('${task.title}',
+                                  Text(task.title,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 15.0,
@@ -73,7 +75,7 @@ class TaskItem extends StatelessWidget {
                                   Row(
                                     children: <Widget>[
                                       Text(
-                                        '${task.description}',
+                                        task.description,
                                         style: TextStyle(
                                             fontSize: 12.0,
                                             color: Colors.black26),
@@ -101,11 +103,17 @@ class TaskItem extends StatelessWidget {
                               ),
                               Row(
                                 children: <Widget>[
-                                  Icon(
-                                    Icons.favorite_border,
-                                    color: Colors.blue,
-                                    size: 20.0,
-                                  ),
+                                  task.favourite
+                                      ? Icon(
+                                          Icons.favorite_border,
+                                          color: Colors.blue,
+                                          size: 20.0,
+                                        )
+                                      : Icon(
+                                          Icons.favorite,
+                                          color: Colors.blue,
+                                          size: 20.0,
+                                        ),
                                 ],
                               )
                             ],

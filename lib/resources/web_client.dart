@@ -122,6 +122,8 @@ class WebClient {
             .setProject(PROJECT_ID) // Your project ID
         ;
     String documentId = await getDocumentID(taskId);
+    print('document id of task $documentId');
+    print(task);
     Database database = Database(client);
     try {
       Response<dynamic> result = await database.updateDocument(

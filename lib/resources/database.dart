@@ -67,10 +67,10 @@ class DatabaseHelper {
         ]);
   }
 
-  Future<List<TaskEntity>> getLocalTask() async {
-    Database db = await instance.database;
-    var result = await db.rawQuery('SELECT * FROM Tasks');
-    print('sql lite');
-    print(result);
-  }
+  // Future<List<TaskEntity>> getLocalTask() async {
+  //   Database db = await instance.database;
+  //   var result = await db.rawQuery('SELECT * FROM Tasks');
+  //   print('sql lite');
+  //   print(result);
+  // }
 }

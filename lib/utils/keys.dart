@@ -13,6 +13,8 @@ class TasksKeys {
   static final taskItem = (String id) => Key('TaskItem__$id');
   static final taskItemCheckbox =
       (String id) => Key('TaskItem__${id}__Checkbox');
+  static final taskItemFavourite =
+      (String id) => Key('TaskItem__${id}__Favourite');
   static final taskItemTask = (String id) => Key('TaskItem__${id}__Task');
   static final taskItemNote = (String id) => Key('TaskItem__${id}__Note');
 
