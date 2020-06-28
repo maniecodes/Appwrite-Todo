@@ -40,11 +40,9 @@ class DrawerBloc extends Bloc<DrawerEvent, DrawerState> {
         final name = users.name;
         final phone = users.phone;
 
-        // int numFavourite =
-        //     event.tasks.where((task) => !task.favourite).toList().length;
-        // int numTasks = event.tasks.length;
-        int numFavourite = 15;
-        int numTasks = 10;
+        int numFavourite =
+            event.tasks.where((task) => task.favourite).toList().length;
+        int numTasks = event.tasks.length;
         int numPlanned = 23;
         int numMyDay = 5;
         yield DrawerLoadSuccess(

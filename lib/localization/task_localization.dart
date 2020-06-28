@@ -62,6 +62,13 @@ class TaskLocalizations {
         locale: locale.toString(),
       );
 
+  String get newDueDateHint => Intl.message(
+        'Select task due date',
+        name: 'newDueDateHint',
+        args: [],
+        locale: locale.toString(),
+      );
+
   String get markAllComplete => Intl.message(
         'Mark all complete',
         name: 'markAllComplete',

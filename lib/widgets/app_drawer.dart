@@ -11,6 +11,7 @@ class AppDrawer extends StatelessWidget {
         return CircularProgressIndicator();
       }
       final numFavourite = (state as DrawerLoadSuccess).numFavourite;
+      final numTasks = (state as DrawerLoadSuccess).numTasks;
       final email = (state as DrawerLoadSuccess).email;
       final name = (state as DrawerLoadSuccess).name;
       print(numFavourite);
@@ -29,6 +30,18 @@ class AppDrawer extends StatelessWidget {
                 ListTile(
                   title: Text('Home'),
                   leading: Icon(Icons.home),
+                  onTap: null,
+                ),
+                ListTile(
+                  title: Text('Tasks'),
+                  leading: Icon(Icons.assignment_turned_in),
+                  trailing: Text(numTasks.toString()),
+                  onTap: null,
+                ),
+                ListTile(
+                  title: Text('Favourite'),
+                  leading: Icon(Icons.favorite),
+                  trailing: Text(numFavourite.toString()),
                   onTap: null,
                 ),
                 ListTile(

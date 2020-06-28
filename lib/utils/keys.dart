@@ -53,6 +53,7 @@ class TasksKeys {
   static const saveNewTask = Key('__saveNewTask__');
   static const titleField = Key('__titleField__');
   static const descriptionField = Key('__descriptionField__');
+  static const dueDateField = Key('__dueDateField__');
 
   // Edit Screen
   static const editTaskScreen = Key('__editTaskScreen__');

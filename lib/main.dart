@@ -107,9 +107,10 @@ class TaskApp extends StatelessWidget {
         TaskRoutes.addTask: (context) {
           return AddEditTaskScreen(
               key: TasksKeys.addTaskScreen,
-              onSave: (title, description) async {
+              onSave: (title, description, dueDateTime) async {
                 BlocProvider.of<TasksBloc>(context).add(TaskAdded(Task(title,
                     description: description,
+                    dueDateTime: dueDateTime,
                     uid: await _userRepository.currentUser())));
               },
               isEditing: false);

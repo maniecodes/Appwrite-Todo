@@ -175,11 +175,13 @@ class TaskDetailsScreen extends StatelessWidget {
                                       MaterialPageRoute(builder: (context) {
                                     return AddEditTaskScreen(
                                       key: TasksKeys.editTaskScreen,
-                                      onSave: (title, description) {
+                                      onSave:
+                                          (title, description, dueDateTime) {
                                         BlocProvider.of<TasksBloc>(context).add(
                                             TaskUpdated(task.copyWith(
                                                 title: title,
-                                                description: description)));
+                                                description: description,
+                                                dueDateTime: dueDateTime)));
                                       },
                                       isEditing: true,
                                       task: task,

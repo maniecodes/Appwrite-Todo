@@ -1,10 +1,13 @@
 import 'package:appwrite_project/localization/task_localization.dart';
 import 'package:appwrite_project/utils/utils.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 
 import 'package:appwrite_project/models/task.dart';
+import 'package:intl/intl.dart';
 
-typedef OnSaveCallback = Function(String title, String description);
+typedef OnSaveCallback = Function(
+    String title, String description, String dueDateTime);
 
 class AddEditTaskScreen extends StatefulWidget {
   final bool isEditing;
@@ -21,10 +24,13 @@ class AddEditTaskScreen extends StatefulWidget {
 
 class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final format = DateFormat("dd-M-yyyy");
 
   String _title;
   String _description;
+  String _dueDateTime;
   bool get isEditing => widget.isEditing;
+  DateTime date = DateTime(1900);
 
   @override
   Widget build(BuildContext context) {
@@ -131,6 +137,51 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                       ),
                     ),
                     SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                              color: Colors.grey.shade400,
+                              offset: Offset(1, 1),
+                              blurRadius: 5,
+                              spreadRadius: .5)
+                        ],
+                      ),
+                      child: DateTimeField(
+                        initialValue: isEditing
+                            ? DateTime.parse(widget.task.dueDateTime)
+                            : null,
+                        key: TasksKeys.dueDateField,
+                        decoration: InputDecoration(
+                          hintText: localizations.newDueDateHint,
+                          hintStyle:
+                              TextStyle(fontSize: 20.0, color: Colors.grey),
+                          border: InputBorder.none,
+                          // fillColor: Color(0xfff3f3f4),
+                          filled: true,
+                          fillColor: Colors.white,
+                          contentPadding:
+                              EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                              borderSide:
+                                  BorderSide(color: Colors.white, width: 1.0)),
+                        ),
+                        format: format,
+                        onShowPicker: (context, currentValue) {
+                          return showDatePicker(
+                              context: context,
+                              firstDate: DateTime(1900),
+                              initialDate: currentValue ?? DateTime.now(),
+                              lastDate: DateTime(2100));
+                        },
+                        onSaved: (value) => _dueDateTime = value.toString(),
+                      ),
+                    ),
+                    SizedBox(
                       height: 30,
                     ),
                   ],
@@ -141,7 +192,7 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                 onTap: () {
                   if (_formKey.currentState.validate()) {
                     _formKey.currentState.save();
-                    widget.onSave(_title, _description);
+                    widget.onSave(_title, _description, _dueDateTime);
                     Navigator.pop(context);
                   }
                 },

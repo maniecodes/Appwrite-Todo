@@ -4,10 +4,12 @@ class TaskEntity {
   final String id;
   final String title;
   final String description;
+  final String createdDateTime;
+  final String dueDateTime;
   final String uid;
 
   TaskEntity(this.complete, this.favourite, this.id, this.title,
-      this.description, this.uid);
+      this.description, this.createdDateTime, this.dueDateTime, this.uid);
 
   @override
   int get hashCode =>
@@ -15,6 +17,8 @@ class TaskEntity {
       favourite.hashCode ^
       title.hashCode ^
       description.hashCode ^
+      createdDateTime.hashCode ^
+      dueDateTime.hashCode ^
       uid.hashCode ^
       id.hashCode;
 
@@ -27,6 +31,8 @@ class TaskEntity {
           favourite == other.favourite &&
           title == other.title &&
           description == other.description &&
+          createdDateTime == other.createdDateTime &&
+          dueDateTime == other.dueDateTime &&
           uid == other.uid &&
           id == other.id;
 
@@ -36,6 +42,8 @@ class TaskEntity {
       'favourite': favourite,
       'title': title,
       'description': description,
+      'createdDateTime': createdDateTime,
+      'dueDateTime': dueDateTime,
       'uid': uid,
       'id': id,
     };
@@ -43,7 +51,7 @@ class TaskEntity {
 
   @override
   String toString() {
-    return 'TaskEntity{complete: $complete, favourite: $favourite, title: $title, description: $description, uid: $uid, id: $id}';
+    return 'TaskEntity{complete: $complete, favourite: $favourite, title: $title, description: $description, createdDateTime: $createdDateTime, dueDateTime: $dueDateTime, uid: $uid, id: $id}';
   }
 
   static TaskEntity fromJson(Map<String, Object> json) {
@@ -53,6 +61,8 @@ class TaskEntity {
         json['id'] as String,
         json['title'] as String,
         json['description'] as String,
+        json['createdDateTime'] as String,
+        json['dueDateTime'] as String,
         json['uid'] as String);
   }
 }
