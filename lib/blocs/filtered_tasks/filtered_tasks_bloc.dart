@@ -41,6 +41,8 @@ class FilteredTasksBloc extends Bloc<FilteredTasksEvent, FilteredTasksState> {
       yield* _mapFilterUpdatedToState(event);
     } else if (event is TasksUpdated) {
       yield* _mapTasksUpdatedToState(event);
+    } else if (event is SearchTasks) {
+      yield* _mapSearchTasksToState(event.searchTerm);
     }
   }
 
@@ -54,6 +56,27 @@ class FilteredTasksBloc extends Bloc<FilteredTasksEvent, FilteredTasksState> {
           event.filter,
         ),
         event.filter,
+      );
+    }
+  }
+
+  Stream<FilteredTasksState> _mapSearchTasksToState(String event) async* {
+    final tasksEntity = await this.tasksRepository.loadTasks();
+    List<Task> tasks = tasksEntity.map((Task.fromEntity)).toList();
+    print(event);
+    List<Task> listTask = tasks
+        .where((task) =>
+            event.trim().toLowerCase().contains(task.title.toLowerCase()))
+        .toList();
+    if (event.length > 0) {
+      yield FilteredTasksLoadSuccess(listTask, VisibilityFilter.all);
+    } else {
+      yield FilteredTasksLoadSuccess(
+        _mapTasksToFilteredTasks(
+          (tasksBloc.state as TasksLoadSuccess).tasks,
+          VisibilityFilter.all,
+        ),
+        VisibilityFilter.all,
       );
     }
   }

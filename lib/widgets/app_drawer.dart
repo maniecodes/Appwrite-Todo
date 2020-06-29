@@ -12,6 +12,7 @@ class AppDrawer extends StatelessWidget {
       }
       final numFavourite = (state as DrawerLoadSuccess).numFavourite;
       final numTasks = (state as DrawerLoadSuccess).numTasks;
+      final numComplete = (state as DrawerLoadSuccess).numComplete;
       final email = (state as DrawerLoadSuccess).email;
       final name = (state as DrawerLoadSuccess).name;
       print(numFavourite);
@@ -42,6 +43,12 @@ class AppDrawer extends StatelessWidget {
                   title: Text('Favourite'),
                   leading: Icon(Icons.favorite),
                   trailing: Text(numFavourite.toString()),
+                  onTap: null,
+                ),
+                ListTile(
+                  title: Text('Completed'),
+                  leading: Icon(Icons.assignment_turned_in),
+                  trailing: Text(numComplete.toString()),
                   onTap: null,
                 ),
                 ListTile(

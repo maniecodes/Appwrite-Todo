@@ -18,13 +18,10 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
   @override
   Stream<TasksState> mapEventToState(TasksEvent event) async* {
     if (event is TasksLoaded) {
-      print('to be loaded');
       yield* _mapTasksLoadedToState();
     } else if (event is TaskAdded) {
-      print('task added');
       yield* _mapTaskAddedToState(event);
     } else if (event is TaskUpdated) {
-      print('to be updated');
       yield* _mapTaskUpdatedToState(event);
     } else if (event is TaskDeleted) {
       yield* _mapTaskDeletedToState(event);
@@ -35,6 +32,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     print('loading state');
     try {
       final tasks = await this.tasksRepository.loadTasks();
+      
       yield TasksLoadSuccess(tasks.map(Task.fromEntity).toList());
     } catch (_) {
       yield TasksLoadFailure();
@@ -43,19 +41,15 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
   Stream<TasksState> _mapTaskAddedToState(TaskAdded event) async* {
     if (state is TasksLoadSuccess) {
-      print('task is loaded');
       await _saveTasksToAppwrite(event.task);
       final tasks = await this.tasksRepository.loadTasks();
+      
       yield TasksLoadSuccess(tasks.map(Task.fromEntity).toList());
     }
   }
 
   Stream<TasksState> _mapTaskUpdatedToState(TaskUpdated event) async* {
     if (state is TasksLoadSuccess) {
-      print(event);
-      print(event.task.dueDateTime);
-      print(event.task.title);
-      print('due');
       await _updateTasksOnAppwrite(event.task.id, event.task);
       final tasks = await this.tasksRepository.loadTasks();
       yield TasksLoadSuccess(tasks.map(Task.fromEntity).toList());

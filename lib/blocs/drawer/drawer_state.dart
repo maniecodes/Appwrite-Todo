@@ -11,6 +11,7 @@ class DrawerLoadInProgress extends DrawerState {}
 
 class DrawerLoadSuccess extends DrawerState {
   final int numFavourite;
+  final int numComplete;
   final int numPlanned;
   final int numMyDay;
   final int numTasks;
@@ -18,15 +19,23 @@ class DrawerLoadSuccess extends DrawerState {
   final String name;
   final String phone;
 
-  const DrawerLoadSuccess(this.numFavourite, this.numPlanned, this.numMyDay,
-      this.numTasks, this.email, this.name, this.phone);
+  const DrawerLoadSuccess(this.numFavourite, this.numComplete, this.numPlanned,
+      this.numMyDay, this.numTasks, this.email, this.name, this.phone);
 
   @override
-  List<Object> get props =>
-      [numFavourite, numPlanned, numMyDay, numTasks, email, name, phone];
+  List<Object> get props => [
+        numFavourite,
+        numComplete,
+        numPlanned,
+        numMyDay,
+        numTasks,
+        email,
+        name,
+        phone
+      ];
 
   @override
   String toString() {
-    return 'DrawerLoadSuccess {numFavourite: $numFavourite, numPlanned: $numPlanned, numMyDay: $numMyDay, numTasks: $numTasks, "}';
+    return 'DrawerLoadSuccess {numFavourite: $numFavourite, numComplete: $numComplete, numPlanned: $numPlanned, numMyDay: $numMyDay, numTasks: $numTasks, "}';
   }
 }

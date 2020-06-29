@@ -1,6 +1,5 @@
 part of 'filtered_tasks_bloc.dart';
 
-
 abstract class FilteredTasksEvent extends Equatable {
   const FilteredTasksEvent();
 }
@@ -15,6 +14,18 @@ class FilterUpdated extends FilteredTasksEvent {
 
   @override
   String toString() => 'FilterUpdated { filter: $filter }';
+}
+
+class SearchTasks extends FilteredTasksEvent {
+  final String searchTerm;
+
+  const SearchTasks({this.searchTerm});
+
+  @override
+  List<Object> get props => [searchTerm];
+
+  @override
+  String toString() => 'SearchTasks { search term: $searchTerm }';
 }
 
 class TasksUpdated extends FilteredTasksEvent {
