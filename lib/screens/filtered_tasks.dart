@@ -15,7 +15,6 @@ class FilteredTasks extends StatelessWidget {
         if (state is FilteredTasksLoadInProgress) {
           return CircularProgressIndicator();
         } else if (state is FilteredTasksLoadSuccess) {
-          print('hoy jty');
           final tasks = state.filteredTasks;
           return Column(
             children: <Widget>[

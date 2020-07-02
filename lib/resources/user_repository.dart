@@ -3,6 +3,7 @@ import '../models/models.dart';
 
 class UserRepository {
   Client client = Client(selfSigned: true);
+  // static const API_ENDPOINT = "http://192.168.1.100/v1";
   // static const API_ENDPOINT = "http://127.0.0.1/v1";
   static const API_ENDPOINT = "http://10.0.2.2/v1";
   static const PROJECT_ID = "5eeafe5ee3d2c";
@@ -15,9 +16,9 @@ class UserRepository {
     String errorMessage;
 
     client
-        .setEndpoint(API_ENDPOINT) // Your API Endpoint
-        .setProject(PROJECT_ID) // Your project ID
-        .selfSigned;
+            .setEndpoint(API_ENDPOINT) // Your API Endpoint
+            .setProject(PROJECT_ID) // Your project ID
+        ;
 
     Account account = Account(client);
     try {
@@ -93,6 +94,8 @@ class UserRepository {
           .listDocuments(collectionId: COLLECTION_ID, filters: ['uid=$userID']);
 
       json = result.data['documents'][0];
+      print('user data');
+      print(json);
 
       return UserEntity.fromJson(json);
     } catch (e) {

@@ -6,8 +6,10 @@ import 'package:appwrite/client.dart';
 import '../models/models.dart';
 
 class WebClient {
-  // static const API_ENDPOINT = "http://127.0.0.1/v1";
+  // static const API_ENDPOINT = "http://192.168.1.100/v1";
   static const API_ENDPOINT = "http://10.0.2.2/v1";
+
+  // static const API_ENDPOINT = "http://127.0.0.1/v1";
   static const PROJECT_ID = "5eeafe5ee3d2c";
   static const COLLECTION_ID = "5eeb001ebd987";
 

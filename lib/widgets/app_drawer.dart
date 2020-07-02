@@ -1,3 +1,4 @@
+import 'package:appwrite_project/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../authentication/authentication.dart';
@@ -15,7 +16,6 @@ class AppDrawer extends StatelessWidget {
       final numComplete = (state as DrawerLoadSuccess).numComplete;
       final email = (state as DrawerLoadSuccess).email;
       final name = (state as DrawerLoadSuccess).name;
-      print(numFavourite);
       return Drawer(
         child: Column(
           children: <Widget>[
@@ -31,7 +31,9 @@ class AppDrawer extends StatelessWidget {
                 ListTile(
                   title: Text('Home'),
                   leading: Icon(Icons.home),
-                  onTap: null,
+                  onTap: () {
+                    Navigator.pushNamed(context, TaskRoutes.home);
+                  },
                 ),
                 ListTile(
                   title: Text('Tasks'),

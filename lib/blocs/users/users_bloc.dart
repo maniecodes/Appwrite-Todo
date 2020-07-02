@@ -1,6 +1,5 @@
 import 'package:appwrite_project/blocs/users/users_event.dart';
 import 'package:appwrite_project/blocs/users/users_state.dart';
-import 'package:appwrite_project/models/user.dart';
 import 'package:appwrite_project/resources/repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,12 +19,4 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
     }
   }
 
-
-  Stream<UsersState> _mapUsersLoadedToState() async* {
-    //try{
-   
-    //  final User user = User.fromEntity();
-     // yield UsersLoadSuccess(user);
-  //  }
-  }
 }

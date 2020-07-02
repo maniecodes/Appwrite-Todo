@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:appwrite_project/blocs/tasks/tasks_bloc.dart';
 import 'package:appwrite_project/models/models.dart';
-import 'package:appwrite_project/models/user.dart';
 import 'package:appwrite_project/resources/repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -14,13 +13,16 @@ part 'drawer_state.dart';
 class DrawerBloc extends Bloc<DrawerEvent, DrawerState> {
   final TasksBloc tasksBloc;
   final UserRepository userRepository;
+  final TaskRepository tasksRepository;
 
   // final DrawerTab drawerTab;
   StreamSubscription tasksSubscription;
 
-  DrawerBloc({@required this.tasksBloc, this.userRepository})
+  DrawerBloc(
+      {@required this.tasksBloc, this.userRepository, this.tasksRepository})
       : assert(tasksBloc != null),
-        assert(userRepository != null) {
+        assert(userRepository != null),
+        assert(tasksRepository != null) {
     tasksSubscription = tasksBloc.listen((state) {
       if (state is TasksLoadSuccess) {
         add(DrawerUpdated(state.tasks));
@@ -35,17 +37,17 @@ class DrawerBloc extends Bloc<DrawerEvent, DrawerState> {
   Stream<DrawerState> mapEventToState(DrawerEvent event) async* {
     if (event is DrawerUpdated) {
       try {
-        final users = await userRepository.getUserInfo();
+        //Think of how to load this information once the user login for better performance
+        final users = await this.userRepository.getUserInfo();
+        final tasks = await this.tasksRepository.loadTasks();
         final email = users.email;
         final name = users.name;
         final phone = users.phone;
-        print(event.tasks);
 
         int numFavourite =
-            event.tasks.where((task) => task.favourite).toList().length;
-        int numTasks = event.tasks.length;
-        int numComplete =
-            event.tasks.where((task) => task.complete).toList().length;
+            tasks.where((task) => task.favourite).toList().length;
+        int numTasks = tasks.length;
+        int numComplete = tasks.where((task) => task.complete).toList().length;
         int numPlanned = 23;
         int numMyDay = 5;
         yield DrawerLoadSuccess(numFavourite, numComplete, numPlanned, numMyDay,
