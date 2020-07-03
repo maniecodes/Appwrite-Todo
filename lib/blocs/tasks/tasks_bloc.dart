@@ -9,8 +9,9 @@ part 'tasks_state.dart';
 
 class TasksBloc extends Bloc<TasksEvent, TasksState> {
   final TasksRepositoryFlutter tasksRepository;
+  final UserRepository userRepository;
 
-  TasksBloc({@required this.tasksRepository});
+  TasksBloc({@required this.tasksRepository, this.userRepository});
 
   @override
   TasksState get initialState => TasksLoadInProgress();
@@ -31,10 +32,14 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
   Stream<TasksState> _mapTasksLoadedToState() async* {
     print('loading state');
     try {
+      final users = await this.tasksRepository.getUserInfo();
       final tasks = await this.tasksRepository.loadTasks();
-      
-      yield TasksLoadSuccess(tasks.map(Task.fromEntity).toList());
+      //
+      // print(users);
+      yield TasksLoadSuccess(
+          tasks.map(Task.fromEntity).toList(), User.fromEntity(users));
     } catch (_) {
+      print('error');
       yield TasksLoadFailure();
     }
   }
@@ -43,8 +48,10 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     if (state is TasksLoadSuccess) {
       await _saveTasksToAppwrite(event.task);
       final tasks = await this.tasksRepository.loadTasks();
-      
-      yield TasksLoadSuccess(tasks.map(Task.fromEntity).toList());
+      final users = await this.tasksRepository.getUserInfo();
+
+      yield TasksLoadSuccess(
+          tasks.map(Task.fromEntity).toList(), User.fromEntity(users));
     }
   }
 
@@ -52,7 +59,9 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     if (state is TasksLoadSuccess) {
       await _updateTasksOnAppwrite(event.task.id, event.task);
       final tasks = await this.tasksRepository.loadTasks();
-      yield TasksLoadSuccess(tasks.map(Task.fromEntity).toList());
+      final users = await this.tasksRepository.getUserInfo();
+      yield TasksLoadSuccess(
+          tasks.map(Task.fromEntity).toList(), User.fromEntity(users));
     }
   }
 
@@ -60,7 +69,9 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     if (state is TasksLoadSuccess) {
       await _deleteTasksFromAppwrite(event.task.id);
       final tasks = await this.tasksRepository.loadTasks();
-      yield TasksLoadSuccess(tasks.map(Task.fromEntity).toList());
+      final users = await this.tasksRepository.getUserInfo();
+      yield TasksLoadSuccess(
+          tasks.map(Task.fromEntity).toList(), User.fromEntity(users));
     }
   }
 

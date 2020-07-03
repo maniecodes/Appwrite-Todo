@@ -90,8 +90,10 @@ class TaskApp extends StatelessWidget {
                   ),
                   BlocProvider<FilteredTasksBloc>(
                     create: (context) => FilteredTasksBloc(
-                        tasksBloc: BlocProvider.of<TasksBloc>(context),
-                        tasksRepository: _tasksRepository),
+                      tasksBloc: BlocProvider.of<TasksBloc>(context),
+                      tasksRepository: _tasksRepository,
+                      userRepository: _userRepository,
+                    ),
                   )
                 ], child: HomeScreen());
               }

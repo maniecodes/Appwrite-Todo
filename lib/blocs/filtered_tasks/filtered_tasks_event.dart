@@ -30,11 +30,12 @@ class SearchTasks extends FilteredTasksEvent {
 
 class TasksUpdated extends FilteredTasksEvent {
   final List<Task> tasks;
+  final User user;
 
-  const TasksUpdated(this.tasks);
+  const TasksUpdated(this.tasks, this.user);
 
   @override
-  List<Object> get props => [tasks];
+  List<Object> get props => [tasks, user];
 
   @override
   String toString() => 'TasksUpdated { tasks: $tasks }';

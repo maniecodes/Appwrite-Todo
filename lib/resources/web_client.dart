@@ -74,6 +74,32 @@ class WebClient {
     }
   }
 
+  Future<UserEntity> fetchUserInfo(String userID) async {
+    Map<String, dynamic> json = {};
+
+    Client client = Client(selfSigned: true);
+    client
+            .setEndpoint(API_ENDPOINT) // Your API Endpoint
+            .setProject("5eeafe5ee3d2c") // Your project ID
+        ;
+    Database database = Database(client);
+
+    try {
+      Response<dynamic> result = await database.listDocuments(
+          collectionId: "5eeafe9b73454", filters: ['uid=$userID']);
+
+      json = await result.data['documents'][0];
+      print('return json');
+      print(json);
+
+      return UserEntity.fromJson(json);
+    } catch (e) {
+      print(e.toString());
+      //TODO:: display error instead
+      return UserEntity.fromJson(json);
+    }
+  }
+
   // Save task into the database
   Future<bool> postTasks(TaskEntity task) async {
     Client client = Client(selfSigned: true);

@@ -1,6 +1,5 @@
 part of 'tasks_bloc.dart';
 
-
 abstract class TasksState extends Equatable {
   const TasksState();
 
@@ -12,8 +11,9 @@ class TasksLoadInProgress extends TasksState {}
 
 class TasksLoadSuccess extends TasksState {
   final List<Task> tasks;
+  final User user;
 
-  const TasksLoadSuccess([this.tasks = const []]);
+  const TasksLoadSuccess([this.tasks = const [], this.user]);
 
   @override
   List<Object> get props => [tasks];

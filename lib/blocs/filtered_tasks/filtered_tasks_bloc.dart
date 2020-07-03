@@ -14,12 +14,16 @@ class FilteredTasksBloc extends Bloc<FilteredTasksEvent, FilteredTasksState> {
   final TasksBloc tasksBloc;
   StreamSubscription tasksSubscription;
   final TasksRepositoryFlutter tasksRepository;
+  final UserRepository userRepository;
 
   FilteredTasksBloc(
-      {@required this.tasksBloc, @required this.tasksRepository}) {
+      {@required this.tasksBloc,
+      @required this.tasksRepository,
+      @required this.userRepository}) {
     tasksSubscription = tasksBloc.listen((state) {
       if (state is TasksLoadSuccess) {
-        add(TasksUpdated((tasksBloc.state as TasksLoadSuccess).tasks));
+        add(TasksUpdated((tasksBloc.state as TasksLoadSuccess).tasks,
+            (tasksBloc.state as TasksLoadSuccess).user));
       }
     });
   }
@@ -27,11 +31,10 @@ class FilteredTasksBloc extends Bloc<FilteredTasksEvent, FilteredTasksState> {
   @override
   FilteredTasksState get initialState {
     print('initial state');
+
     return tasksBloc.state is TasksLoadSuccess
-        ? FilteredTasksLoadSuccess(
-            (tasksBloc.state as TasksLoadSuccess).tasks,
-            VisibilityFilter.all,
-          )
+        ? FilteredTasksLoadSuccess((tasksBloc.state as TasksLoadSuccess).tasks,
+            VisibilityFilter.all, (tasksBloc.state as TasksLoadSuccess).user)
         : FilteredTasksLoadInProgress();
   }
 
@@ -51,17 +54,18 @@ class FilteredTasksBloc extends Bloc<FilteredTasksEvent, FilteredTasksState> {
   ) async* {
     if (tasksBloc.state is TasksLoadSuccess) {
       yield FilteredTasksLoadSuccess(
-        _mapTasksToFilteredTasks(
-          (tasksBloc.state as TasksLoadSuccess).tasks,
+          _mapTasksToFilteredTasks(
+            (tasksBloc.state as TasksLoadSuccess).tasks,
+            event.filter,
+          ),
           event.filter,
-        ),
-        event.filter,
-      );
+          (tasksBloc.state as TasksLoadSuccess).user);
     }
   }
 
   Stream<FilteredTasksState> _mapSearchTasksToState(String event) async* {
     final tasksEntity = await this.tasksRepository.loadTasks();
+    final users = await this.tasksRepository.getUserInfo();
     List<Task> tasks = tasksEntity.map((Task.fromEntity)).toList();
     print(event);
     List<Task> listTask = tasks
@@ -69,15 +73,16 @@ class FilteredTasksBloc extends Bloc<FilteredTasksEvent, FilteredTasksState> {
             event.trim().toLowerCase().contains(task.title.toLowerCase()))
         .toList();
     if (event.length > 0) {
-      yield FilteredTasksLoadSuccess(listTask, VisibilityFilter.all);
+      yield FilteredTasksLoadSuccess(
+          listTask, VisibilityFilter.all, User.fromEntity(users));
     } else {
       yield FilteredTasksLoadSuccess(
-        _mapTasksToFilteredTasks(
-          (tasksBloc.state as TasksLoadSuccess).tasks,
+          _mapTasksToFilteredTasks(
+            (tasksBloc.state as TasksLoadSuccess).tasks,
+            VisibilityFilter.all,
+          ),
           VisibilityFilter.all,
-        ),
-        VisibilityFilter.all,
-      );
+          User.fromEntity(users));
     }
   }
 
@@ -89,13 +94,15 @@ class FilteredTasksBloc extends Bloc<FilteredTasksEvent, FilteredTasksState> {
     final visibilityFilter = state is FilteredTasksLoadSuccess
         ? (state as FilteredTasksLoadSuccess).activeFilter
         : VisibilityFilter.all;
+    final users = await this.tasksRepository.getUserInfo();
+    print(users);
     yield FilteredTasksLoadSuccess(
-      _mapTasksToFilteredTasks(
-        tasks.map(Task.fromEntity).toList(),
+        _mapTasksToFilteredTasks(
+          tasks.map(Task.fromEntity).toList(),
+          visibilityFilter,
+        ),
         visibilityFilter,
-      ),
-      visibilityFilter,
-    );
+        User.fromEntity(users));
   }
 
   List<Task> _mapTasksToFilteredTasks(

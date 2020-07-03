@@ -93,9 +93,7 @@ class UserRepository {
       Response<dynamic> result = await database
           .listDocuments(collectionId: COLLECTION_ID, filters: ['uid=$userID']);
 
-      json = result.data['documents'][0];
-      print('user data');
-      print(json);
+      json = await result.data['documents'][0];
 
       return UserEntity.fromJson(json);
     } catch (e) {
