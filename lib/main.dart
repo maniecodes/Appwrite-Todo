@@ -145,6 +145,40 @@ class TaskApp extends StatelessWidget {
                 // arguments: ModalRoute.of(context).settings.arguments,
                 ),
           );
+        },
+        TaskRoutes.favouriteTasks: (context) {
+          return MultiBlocProvider(providers: [
+            BlocProvider<DrawerBloc>(
+              create: (context) => DrawerBloc(
+                  tasksBloc: BlocProvider.of<TasksBloc>(context),
+                  userRepository: _userRepository,
+                  tasksRepository: _tasksRepository),
+            ),
+            BlocProvider<FilteredTasksBloc>(
+              create: (context) => FilteredTasksBloc(
+                tasksBloc: BlocProvider.of<TasksBloc>(context),
+                tasksRepository: _tasksRepository,
+                userRepository: _userRepository,
+              ),
+            )
+          ], child: FavouriteScreen());
+        },
+        TaskRoutes.completedTasks: (context) {
+          return MultiBlocProvider(providers: [
+            BlocProvider<DrawerBloc>(
+              create: (context) => DrawerBloc(
+                  tasksBloc: BlocProvider.of<TasksBloc>(context),
+                  userRepository: _userRepository,
+                  tasksRepository: _tasksRepository),
+            ),
+            BlocProvider<FilteredTasksBloc>(
+              create: (context) => FilteredTasksBloc(
+                tasksBloc: BlocProvider.of<TasksBloc>(context),
+                tasksRepository: _tasksRepository,
+                userRepository: _userRepository,
+              ),
+            )
+          ], child: CompleteTaskScreen());
         }
       },
     );

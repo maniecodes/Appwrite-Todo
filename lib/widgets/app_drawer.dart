@@ -49,7 +49,11 @@ class AppDrawer extends StatelessWidget {
                     .toList()
                     .length
                     .toString()),
-                onTap: null,
+                onTap: () {
+                  Navigator.pushReplacementNamed(
+                      context, TaskRoutes.favouriteTasks,
+                      arguments: ScreenArguments(tasks));
+                },
               ),
               ListTile(
                 title: Text('Completed'),
@@ -59,7 +63,11 @@ class AppDrawer extends StatelessWidget {
                     .toList()
                     .length
                     .toString()),
-                onTap: null,
+                onTap: () {
+                  Navigator.pushReplacementNamed(
+                      context, TaskRoutes.completedTasks,
+                      arguments: ScreenArguments(tasks));
+                },
               ),
               ListTile(
                 title: Text('Logout'),
