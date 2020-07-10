@@ -1,10 +1,10 @@
-import 'package:appwrite_project/models/task.dart';
-import 'package:appwrite_project/screens/task_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../blocs/blocs.dart';
 import '../utils/utils.dart';
 import '../widgets/widgets.dart';
+import '../models/models.dart';
+import '../screens/screens.dart';
 
 class FilteredTasks extends StatelessWidget {
   final List<Task> tasks;

@@ -1,5 +1,3 @@
-import 'package:appwrite_project/screens/view_task_screen.dart';
-import 'package:appwrite_project/widgets/screen_argument.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +8,7 @@ import './blocs/blocs.dart';
 import './resources/repository.dart';
 import './models/models.dart';
 import './localization/task_localization.dart';
+import './widgets/widgets.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

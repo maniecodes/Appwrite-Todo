@@ -1,9 +1,9 @@
-import 'package:appwrite_project/blocs/filtered_tasks/filtered_tasks_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../widgets/widgets.dart';
 import '../screens/screens.dart';
 import '../utils/utils.dart';
+import '../blocs/blocs.dart';
 
 class HomeScreen extends StatelessWidget {
   @override

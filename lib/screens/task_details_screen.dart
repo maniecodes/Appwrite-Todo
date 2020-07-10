@@ -1,9 +1,9 @@
-import 'package:appwrite_project/blocs/tasks/tasks_bloc.dart';
-import 'package:appwrite_project/localization/task_localization.dart';
-import 'package:appwrite_project/screens/add_edit_task_screen.dart';
-import 'package:appwrite_project/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../blocs/blocs.dart';
+import '../localization/task_localization.dart';
+import '../screens/screens.dart';
+import '../utils/utils.dart';
 
 class TaskDetailsScreen extends StatelessWidget {
   final String id;

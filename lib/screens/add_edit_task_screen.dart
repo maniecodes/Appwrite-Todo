@@ -1,10 +1,9 @@
-import 'package:appwrite_project/localization/task_localization.dart';
-import 'package:appwrite_project/utils/utils.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
-
-import 'package:appwrite_project/models/task.dart';
 import 'package:intl/intl.dart';
+import '../localization/task_localization.dart';
+import '../utils/utils.dart';
+import '../models/models.dart';
 
 typedef OnSaveCallback = Function(
     String title, String description, String dueDateTime);
