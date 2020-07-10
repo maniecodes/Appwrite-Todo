@@ -1,6 +1,7 @@
 import 'package:appwrite_project/models/models.dart';
 import 'package:appwrite_project/models/task.dart';
 import 'package:appwrite_project/utils/utils.dart';
+import 'package:appwrite_project/widgets/screen_argument.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../authentication/authentication.dart';
@@ -35,7 +36,10 @@ class AppDrawer extends StatelessWidget {
                 title: Text('Tasks'),
                 leading: Icon(Icons.assignment_turned_in),
                 trailing: Text(tasks.length.toString()),
-                onTap: null,
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, TaskRoutes.viewTasks,
+                      arguments: ScreenArguments(tasks));
+                },
               ),
               ListTile(
                 title: Text('Favourite'),

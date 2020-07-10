@@ -33,8 +33,11 @@ class FilteredTasksBloc extends Bloc<FilteredTasksEvent, FilteredTasksState> {
     print('initial state');
 
     return tasksBloc.state is TasksLoadSuccess
-        ? FilteredTasksLoadSuccess((tasksBloc.state as TasksLoadSuccess).tasks,
-            VisibilityFilter.all, (tasksBloc.state as TasksLoadSuccess).user)
+        ? FilteredTasksLoadSuccess(
+            (tasksBloc.state as TasksLoadSuccess).tasks,
+            (tasksBloc.state as TasksLoadSuccess).tasks,
+            VisibilityFilter.all,
+            (tasksBloc.state as TasksLoadSuccess).user)
         : FilteredTasksLoadInProgress();
   }
 
@@ -58,6 +61,7 @@ class FilteredTasksBloc extends Bloc<FilteredTasksEvent, FilteredTasksState> {
             (tasksBloc.state as TasksLoadSuccess).tasks,
             event.filter,
           ),
+          (tasksBloc.state as TasksLoadSuccess).tasks,
           event.filter,
           (tasksBloc.state as TasksLoadSuccess).user);
     }
@@ -74,13 +78,14 @@ class FilteredTasksBloc extends Bloc<FilteredTasksEvent, FilteredTasksState> {
         .toList();
     if (event.length > 0) {
       yield FilteredTasksLoadSuccess(
-          listTask, VisibilityFilter.all, User.fromEntity(users));
+          listTask, tasks, VisibilityFilter.all, User.fromEntity(users));
     } else {
       yield FilteredTasksLoadSuccess(
           _mapTasksToFilteredTasks(
             (tasksBloc.state as TasksLoadSuccess).tasks,
             VisibilityFilter.all,
           ),
+          tasks,
           VisibilityFilter.all,
           User.fromEntity(users));
     }
@@ -89,8 +94,8 @@ class FilteredTasksBloc extends Bloc<FilteredTasksEvent, FilteredTasksState> {
   Stream<FilteredTasksState> _mapTasksUpdatedToState(
     TasksUpdated event,
   ) async* {
-    final tasks = await this.tasksRepository.loadTasks();
-
+    final tasksEntity = await this.tasksRepository.loadTasks();
+    List<Task> tasks = tasksEntity.map((Task.fromEntity)).toList();
     final visibilityFilter = state is FilteredTasksLoadSuccess
         ? (state as FilteredTasksLoadSuccess).activeFilter
         : VisibilityFilter.all;
@@ -98,9 +103,10 @@ class FilteredTasksBloc extends Bloc<FilteredTasksEvent, FilteredTasksState> {
     print(users);
     yield FilteredTasksLoadSuccess(
         _mapTasksToFilteredTasks(
-          tasks.map(Task.fromEntity).toList(),
+          tasksEntity.map(Task.fromEntity).toList(),
           visibilityFilter,
         ),
+        tasks,
         visibilityFilter,
         User.fromEntity(users));
   }

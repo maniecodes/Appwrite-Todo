@@ -1,13 +1,15 @@
 import 'package:appwrite_project/blocs/filtered_tasks/filtered_tasks_bloc.dart';
+import 'package:appwrite_project/utils/utils.dart';
+import 'package:appwrite_project/widgets/screen_argument.dart';
+import 'package:appwrite_project/widgets/view_task.dart';
+import 'package:appwrite_project/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../widgets/widgets.dart';
-import '../screens/screens.dart';
-import '../utils/utils.dart';
 
-class HomeScreen extends StatelessWidget {
+class ViewTaskScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print('view task');
     return BlocBuilder<FilteredTasksBloc, FilteredTasksState>(
         builder: (context, state) {
       if (state is FilteredTasksLoadInProgress) {
@@ -18,23 +20,12 @@ class HomeScreen extends StatelessWidget {
         final tasks = state.allTasks;
 
         return Scaffold(
-          // backgroundColor: Colors.white,
+          backgroundColor: Colors.white,
           appBar: AppBar(
             title: Text(FlutterBlocLocalizations.of(context).appTitle),
           ),
-
           drawer: AppDrawer(tasks: tasks, user: user),
-          body: FilteredTasks(tasks: filteredTasks),
-          floatingActionButton: FloatingActionButton(
-            key: TasksKeys.addTaskFab,
-            onPressed: () {
-              Navigator.pushNamed(context, TaskRoutes.addTask);
-            },
-            child: Icon(
-              Icons.add,
-              color: Colors.white,
-            ),
-          ),
+          body: ViewTask(tasks: filteredTasks),
         );
       } else {
         return CircularProgressIndicator();

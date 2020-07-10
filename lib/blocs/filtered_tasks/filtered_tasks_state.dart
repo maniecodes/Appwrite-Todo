@@ -11,11 +11,12 @@ class FilteredTasksLoadInProgress extends FilteredTasksState {}
 
 class FilteredTasksLoadSuccess extends FilteredTasksState {
   final List<Task> filteredTasks;
+  final List<Task> allTasks;
   final VisibilityFilter activeFilter;
   final User user;
 
   const FilteredTasksLoadSuccess(
-      this.filteredTasks, this.activeFilter, this.user);
+      this.filteredTasks, this.allTasks, this.activeFilter, this.user);
 
   @override
   List<Object> get props => [filteredTasks, activeFilter];

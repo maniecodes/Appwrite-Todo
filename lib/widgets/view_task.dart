@@ -1,14 +1,15 @@
+import 'package:appwrite_project/blocs/filtered_tasks/filtered_tasks_bloc.dart';
+import 'package:appwrite_project/blocs/tasks/tasks_bloc.dart';
 import 'package:appwrite_project/models/task.dart';
 import 'package:appwrite_project/screens/task_details_screen.dart';
+import 'package:appwrite_project/utils/utils.dart';
+import 'package:appwrite_project/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../blocs/blocs.dart';
-import '../utils/utils.dart';
-import '../widgets/widgets.dart';
 
-class FilteredTasks extends StatelessWidget {
+class ViewTask extends StatelessWidget {
   final List<Task> tasks;
-  FilteredTasks({Key key, this.tasks}) : super(key: key);
+  ViewTask({Key key, this.tasks}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +38,7 @@ class FilteredTasks extends StatelessWidget {
                         .add(SearchTasks(searchTerm: value));
                   },
                   decoration: InputDecoration(
-                    hintText: "Search All",
+                    hintText: "Search by Task Name",
                     border: InputBorder.none,
                   ),
                 ),
