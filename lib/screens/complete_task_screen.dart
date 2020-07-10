@@ -1,9 +1,9 @@
-import 'package:appwrite_project/blocs/filtered_tasks/filtered_tasks_bloc.dart';
-import 'package:appwrite_project/models/task.dart';
-import 'package:appwrite_project/utils/utils.dart';
-import 'package:appwrite_project/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../blocs/blocs.dart';
+import '../models/models.dart';
+import '../utils/utils.dart';
+import '../widgets/widgets.dart';
 
 class CompleteTaskScreen extends StatelessWidget {
   @override
@@ -17,6 +17,7 @@ class CompleteTaskScreen extends StatelessWidget {
         final tasks = state.allTasks;
         List<Task> completedTasks =
             tasks.where((task) => task.complete).toList();
+        print(user.email);
 
         return Scaffold(
           backgroundColor: Colors.white,

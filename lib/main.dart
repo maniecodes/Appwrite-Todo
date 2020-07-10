@@ -111,74 +111,128 @@ class TaskApp extends StatelessWidget {
           );
         },
         TaskRoutes.addTask: (context) {
-          return AddEditTaskScreen(
-              key: TasksKeys.addTaskScreen,
-              onSave: (title, description, dueDateTime) async {
-                BlocProvider.of<TasksBloc>(context).add(
-                  TaskAdded(Task(title,
-                      description: description,
-                      dueDateTime: dueDateTime,
-                      uid: await _userRepository.currentUser())),
-                );
-              },
-              isEditing: false);
+          return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+              builder: (context, state) {
+            if (state is AuthenticationAuthenticated) {
+              return AddEditTaskScreen(
+                  key: TasksKeys.addTaskScreen,
+                  onSave: (title, description, dueDateTime) async {
+                    BlocProvider.of<TasksBloc>(context).add(
+                      TaskAdded(Task(title,
+                          description: description,
+                          dueDateTime: dueDateTime,
+                          uid: await _userRepository.currentUser())),
+                    );
+                  },
+                  isEditing: false);
+            }
+            if (state is AuthenticationUnauthenticated) {
+              return WelcomeScreen(userRepository: _userRepository);
+            }
+            if (state is AuthenticationLoading) {
+              return SplashScreen();
+            }
+            return WelcomeScreen(userRepository: _userRepository);
+          });
         },
         TaskRoutes.viewTasks: (context) {
           //print(ModalRoute.of(context).settings.arguments.toString());
-          return MultiBlocProvider(
-            providers: [
-              BlocProvider<DrawerBloc>(
-                create: (context) => DrawerBloc(
-                    tasksBloc: BlocProvider.of<TasksBloc>(context),
-                    userRepository: _userRepository,
-                    tasksRepository: _tasksRepository),
-              ),
-              BlocProvider<FilteredTasksBloc>(
-                create: (context) => FilteredTasksBloc(
-                  tasksBloc: BlocProvider.of<TasksBloc>(context),
-                  tasksRepository: _tasksRepository,
-                  userRepository: _userRepository,
-                ),
-              )
-            ],
-            child: ViewTaskScreen(
-                // arguments: ModalRoute.of(context).settings.arguments,
-                ),
-          );
+          return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+              builder: (context, state) {
+            if (state is AuthenticationAuthenticated) {
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider<DrawerBloc>(
+                    create: (context) => DrawerBloc(
+                        tasksBloc: BlocProvider.of<TasksBloc>(context),
+                        userRepository: _userRepository,
+                        tasksRepository: _tasksRepository),
+                  ),
+                  BlocProvider<FilteredTasksBloc>(
+                    create: (context) => FilteredTasksBloc(
+                      tasksBloc: BlocProvider.of<TasksBloc>(context),
+                      tasksRepository: _tasksRepository,
+                      userRepository: _userRepository,
+                    ),
+                  )
+                ],
+                child: ViewTaskScreen(
+                    // arguments: ModalRoute.of(context).settings.arguments,
+                    ),
+              );
+            }
+            if (state is AuthenticationUnauthenticated) {
+              return WelcomeScreen(userRepository: _userRepository);
+            }
+            if (state is AuthenticationLoading) {
+              return SplashScreen();
+            }
+            return WelcomeScreen(userRepository: _userRepository);
+          });
         },
         TaskRoutes.favouriteTasks: (context) {
-          return MultiBlocProvider(providers: [
-            BlocProvider<DrawerBloc>(
-              create: (context) => DrawerBloc(
-                  tasksBloc: BlocProvider.of<TasksBloc>(context),
-                  userRepository: _userRepository,
-                  tasksRepository: _tasksRepository),
-            ),
-            BlocProvider<FilteredTasksBloc>(
-              create: (context) => FilteredTasksBloc(
-                tasksBloc: BlocProvider.of<TasksBloc>(context),
-                tasksRepository: _tasksRepository,
-                userRepository: _userRepository,
-              ),
-            )
-          ], child: FavouriteScreen());
+          return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+              builder: (context, state) {
+            if (state is AuthenticationAuthenticated) {
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider<DrawerBloc>(
+                    create: (context) => DrawerBloc(
+                        tasksBloc: BlocProvider.of<TasksBloc>(context),
+                        userRepository: _userRepository,
+                        tasksRepository: _tasksRepository),
+                  ),
+                  BlocProvider<FilteredTasksBloc>(
+                    create: (context) => FilteredTasksBloc(
+                      tasksBloc: BlocProvider.of<TasksBloc>(context),
+                      tasksRepository: _tasksRepository,
+                      userRepository: _userRepository,
+                    ),
+                  )
+                ],
+                child: FavouriteScreen(),
+              );
+            }
+            if (state is AuthenticationUnauthenticated) {
+              return WelcomeScreen(userRepository: _userRepository);
+            }
+            if (state is AuthenticationLoading) {
+              return SplashScreen();
+            }
+            return WelcomeScreen(userRepository: _userRepository);
+          });
         },
         TaskRoutes.completedTasks: (context) {
-          return MultiBlocProvider(providers: [
-            BlocProvider<DrawerBloc>(
-              create: (context) => DrawerBloc(
-                  tasksBloc: BlocProvider.of<TasksBloc>(context),
-                  userRepository: _userRepository,
-                  tasksRepository: _tasksRepository),
-            ),
-            BlocProvider<FilteredTasksBloc>(
-              create: (context) => FilteredTasksBloc(
-                tasksBloc: BlocProvider.of<TasksBloc>(context),
-                tasksRepository: _tasksRepository,
-                userRepository: _userRepository,
-              ),
-            )
-          ], child: CompleteTaskScreen());
+          return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+              builder: (context, state) {
+            if (state is AuthenticationAuthenticated) {
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider<DrawerBloc>(
+                    create: (context) => DrawerBloc(
+                        tasksBloc: BlocProvider.of<TasksBloc>(context),
+                        userRepository: _userRepository,
+                        tasksRepository: _tasksRepository),
+                  ),
+                  BlocProvider<FilteredTasksBloc>(
+                    create: (context) => FilteredTasksBloc(
+                      tasksBloc: BlocProvider.of<TasksBloc>(context),
+                      tasksRepository: _tasksRepository,
+                      userRepository: _userRepository,
+                    ),
+                  )
+                ],
+                child: CompleteTaskScreen(),
+              );
+            }
+            if (state is AuthenticationUnauthenticated) {
+              return WelcomeScreen(userRepository: _userRepository);
+            }
+            if (state is AuthenticationLoading) {
+              return SplashScreen();
+            }
+            return WelcomeScreen(userRepository: _userRepository);
+          });
         }
       },
     );

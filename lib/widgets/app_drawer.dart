@@ -9,7 +9,8 @@ import '../authentication/authentication.dart';
 class AppDrawer extends StatelessWidget {
   final List<Task> tasks;
   final User user;
-  AppDrawer({Key key, this.tasks, this.user}) : super(key: key);
+  AppDrawer({Key key, @required this.tasks, @required this.user})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class AppDrawer extends StatelessWidget {
                 title: Text('Home'),
                 leading: Icon(Icons.home),
                 onTap: () {
-                  Navigator.pushNamed(context, TaskRoutes.home);
+                  Navigator.pushReplacementNamed(context, TaskRoutes.home);
                 },
               ),
               ListTile(
