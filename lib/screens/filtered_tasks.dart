@@ -65,6 +65,7 @@ class FilteredTasks extends StatelessWidget {
                           .add(TaskAdded(task))));
                 },
                 onTap: () async {
+                  print(task.id);
                   final removeTask = await Navigator.of(context)
                       .push(MaterialPageRoute(builder: (_) {
                     return TaskDetailsScreen(id: task.id);

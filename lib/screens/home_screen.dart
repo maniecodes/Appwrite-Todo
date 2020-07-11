@@ -21,8 +21,9 @@ class HomeScreen extends StatelessWidget {
         final filteredTasks = state.filteredTasks;
         final user = state.user;
         final tasks = state.allTasks;
-        print('home screen');
+        print('filtered tasks');
         print(filteredTasks);
+        print('all tasks');
         print(state.allTasks);
 
         return Scaffold(

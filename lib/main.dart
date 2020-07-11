@@ -93,11 +93,12 @@ class TaskApp extends StatelessWidget {
                   ),
                   BlocProvider<FilteredTasksBloc>(
                     create: (context) => FilteredTasksBloc(
-                      tasksBloc: BlocProvider.of<TasksBloc>(context),
+                      tasksBloc: BlocProvider.of<TasksBloc>(context)
+                        ..add(TasksLoaded()),
                       tasksRepository: _tasksRepository,
                       userRepository: _userRepository,
                     ),
-                  )
+                  ),
                 ], child: HomeScreen());
               }
               if (state is AuthenticationUnauthenticated) {
