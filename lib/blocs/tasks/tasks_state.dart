@@ -19,7 +19,7 @@ class TasksLoadSuccess extends TasksState {
   List<Object> get props => [tasks];
 
   @override
-  String toString() => 'TasksLoadSuccess {tasks: $tasks}';
+  String toString() => 'TasksLoadSuccess {tasks: $tasks, user: $user}';
 }
 
 class TasksLoadFailure extends TasksState {}

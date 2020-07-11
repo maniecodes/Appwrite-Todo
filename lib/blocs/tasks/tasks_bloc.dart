@@ -19,10 +19,12 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
   @override
   Stream<TasksState> mapEventToState(TasksEvent event) async* {
     if (event is TasksLoaded) {
+      print('task loaded');
       yield* _mapTasksLoadedToState();
     } else if (event is TaskAdded) {
       yield* _mapTaskAddedToState(event);
     } else if (event is TaskUpdated) {
+      print('task updated');
       yield* _mapTaskUpdatedToState(event);
     } else if (event is TaskDeleted) {
       yield* _mapTaskDeletedToState(event);
@@ -30,10 +32,12 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
   }
 
   Stream<TasksState> _mapTasksLoadedToState() async* {
-    print('loading state');
+    print('loading task state');
     try {
       final users = await this.tasksRepository.getUserInfo();
       final tasks = await this.tasksRepository.loadTasks();
+      print(tasks);
+      print('my task above');
       //
       // print(users);
       yield TasksLoadSuccess(

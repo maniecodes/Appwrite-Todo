@@ -59,7 +59,7 @@ class WebClient {
             .setProject(PROJECT_ID) // Your project ID
         ;
     Database database = Database(client);
-
+    print('fetch all task');
     try {
       Response<dynamic> result = await database
           .listDocuments(collectionId: COLLECTION_ID, filters: ['uid=$userId']);
@@ -89,8 +89,6 @@ class WebClient {
           collectionId: "5eeafe9b73454", filters: ['uid=$userID']);
 
       json = await result.data['documents'][0];
-      print('return json');
-      print(json);
 
       return UserEntity.fromJson(json);
     } catch (e) {

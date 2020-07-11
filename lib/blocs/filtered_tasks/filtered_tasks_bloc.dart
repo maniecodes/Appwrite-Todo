@@ -29,23 +29,15 @@ class FilteredTasksBloc extends Bloc<FilteredTasksEvent, FilteredTasksState> {
   }
 
   @override
-  FilteredTasksState get initialState {
-    print('initial state');
-
-    return tasksBloc.state is TasksLoadSuccess
-        ? FilteredTasksLoadSuccess(
-            (tasksBloc.state as TasksLoadSuccess).tasks,
-            (tasksBloc.state as TasksLoadSuccess).tasks,
-            VisibilityFilter.all,
-            (tasksBloc.state as TasksLoadSuccess).user)
-        : FilteredTasksLoadInProgress();
-  }
+  FilteredTasksState get initialState => FilteredTasksLoadInProgress();
 
   @override
   Stream<FilteredTasksState> mapEventToState(FilteredTasksEvent event) async* {
     if (event is FilterUpdated) {
+      print('fliter updated');
       yield* _mapFilterUpdatedToState(event);
     } else if (event is TasksUpdated) {
+      print('task updated');
       yield* _mapTasksUpdatedToState(event);
     } else if (event is SearchTasks) {
       yield* _mapSearchTasksToState(event.searchTerm);
@@ -56,6 +48,7 @@ class FilteredTasksBloc extends Bloc<FilteredTasksEvent, FilteredTasksState> {
     FilterUpdated event,
   ) async* {
     if (tasksBloc.state is TasksLoadSuccess) {
+      print('task is loaded success');
       yield FilteredTasksLoadSuccess(
           _mapTasksToFilteredTasks(
             (tasksBloc.state as TasksLoadSuccess).tasks,

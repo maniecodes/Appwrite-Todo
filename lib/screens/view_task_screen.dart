@@ -12,7 +12,12 @@ class ViewTaskScreen extends StatelessWidget {
     return BlocBuilder<FilteredTasksBloc, FilteredTasksState>(
         builder: (context, state) {
       if (state is FilteredTasksLoadInProgress) {
-        return CircularProgressIndicator();
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(FlutterBlocLocalizations.of(context).appTitle),
+          ),
+          body: Center(child: CircularProgressIndicator()),
+        );
       } else if (state is FilteredTasksLoadSuccess) {
         final filteredTasks = state.filteredTasks;
         final user = state.user;
@@ -27,7 +32,12 @@ class ViewTaskScreen extends StatelessWidget {
           body: ViewTask(tasks: filteredTasks),
         );
       } else {
-        return CircularProgressIndicator();
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(FlutterBlocLocalizations.of(context).appTitle),
+          ),
+          body: Center(child: CircularProgressIndicator()),
+        );
       }
     });
   }

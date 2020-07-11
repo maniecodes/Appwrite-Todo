@@ -22,8 +22,6 @@ class AuthenticationBloc
   ) async* {
     if (event is AppStarted) {
       final bool isSignedIn = await userRepository.isSignedIn();
-      print('is signed in');
-      print(isSignedIn);
       if (isSignedIn) {
         yield AuthenticationAuthenticated();
       } else {
