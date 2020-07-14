@@ -3,7 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../resources/user_repository.dart';
+import '../../resources/repository.dart';
 import '../../authentication/authentication_bloc.dart';
 import '../../authentication/authentication_event.dart';
 
@@ -11,7 +11,7 @@ part 'registration_event.dart';
 part 'registration_state.dart';
 
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
-  final UserRepository userRepository;
+  final UserRepositoryFlutter userRepository;
   final AuthenticationBloc authenticationBloc;
 
   RegistrationBloc({
@@ -29,10 +29,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
 
       try {
         await userRepository.signup(
-            email: event.email,
-            password: event.password,
-            name: event.name,
-            phone: event.phone);
+            event.email, event.password, event.name, event.phone);
         authenticationBloc.add(LoggedIn());
 
         yield RegistrationInitial();

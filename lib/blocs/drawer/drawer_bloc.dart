@@ -1,19 +1,20 @@
 import 'dart:async';
-
-import 'package:appwrite_project/blocs/tasks/tasks_bloc.dart';
-import 'package:appwrite_project/models/models.dart';
-import 'package:appwrite_project/resources/repository.dart';
+import 'package:appwrite_project/resources/user_repository_flutter.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../blocs/blocs.dart';
+import '../../models/models.dart';
+import '../../resources/repository.dart';
 
 part 'drawer_event.dart';
 part 'drawer_state.dart';
 
 class DrawerBloc extends Bloc<DrawerEvent, DrawerState> {
   final TasksBloc tasksBloc;
-  final UserRepository userRepository;
-  final TaskRepository tasksRepository;
+  final UserRepositoryFlutter userRepository;
+  final TasksRepositoryFlutter tasksRepository;
 
   // final DrawerTab drawerTab;
   StreamSubscription tasksSubscription;

@@ -9,7 +9,7 @@ part 'tasks_state.dart';
 
 class TasksBloc extends Bloc<TasksEvent, TasksState> {
   final TasksRepositoryFlutter tasksRepository;
-  final UserRepository userRepository;
+  final UserRepositoryFlutter userRepository;
 
   TasksBloc({@required this.tasksRepository, this.userRepository});
 

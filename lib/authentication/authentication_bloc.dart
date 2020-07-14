@@ -1,14 +1,14 @@
 import 'dart:async';
-
-import 'package:appwrite_project/authentication/authentication_event.dart';
-import 'package:appwrite_project/authentication/authentication_state.dart';
-import 'package:appwrite_project/resources/user_repository.dart';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 
+import './authentication_event.dart';
+import './authentication_state.dart';
+import '../resources/repository.dart';
+
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  final UserRepository userRepository;
+  final UserRepositoryFlutter userRepository;
 
   AuthenticationBloc({@required this.userRepository})
       : assert(userRepository != null);

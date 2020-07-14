@@ -12,7 +12,7 @@ import './widgets/widgets.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  final UserRepository userRepository = UserRepository();
+  final UserRepositoryFlutter userRepository = UserRepositoryFlutter();
   final TasksRepositoryFlutter taskRepository = TasksRepositoryFlutter(
       // fileStorage: const FileStorage(
       //   '__task_app__',
@@ -122,7 +122,7 @@ class TaskApp extends StatelessWidget {
                       TaskAdded(Task(title,
                           description: description,
                           dueDateTime: dueDateTime,
-                          uid: await _userRepository.currentUser())),
+                          uid: await _userRepository.getCurrentUser())),
                     );
                   },
                   isEditing: false);

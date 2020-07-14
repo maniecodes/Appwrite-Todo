@@ -11,11 +11,11 @@ class WebClient {
 
   // static const API_ENDPOINT = "http://127.0.0.1/v1";
   static const PROJECT_ID = "5eeafe5ee3d2c";
-  static const COLLECTION_ID = "5eeb001ebd987";
+  static const DATABASE_COLLECTION_ID = "5eeb001ebd987";
+  static const USER_COLLECTION_ID = "5eeafe9b73454";
 
   const WebClient();
 
-  //TODO::: try to remove this function as it is a duplicate of current user in user_repository.dart
   Future<String> getCurrentUser() async {
     String uid;
     String errorMessage;
@@ -61,8 +61,8 @@ class WebClient {
     Database database = Database(client);
     print('fetch all task');
     try {
-      Response<dynamic> result = await database
-          .listDocuments(collectionId: COLLECTION_ID, filters: ['uid=$userId']);
+      Response<dynamic> result = await database.listDocuments(
+          collectionId: DATABASE_COLLECTION_ID, filters: ['uid=$userId']);
       final json = result.data['documents'];
       final tasks =
           (json).map<TaskEntity>((task) => TaskEntity.fromJson(task)).toList();
@@ -109,7 +109,7 @@ class WebClient {
     Database database = Database(client);
     try {
       await database.createDocument(
-          collectionId: COLLECTION_ID,
+          collectionId: DATABASE_COLLECTION_ID,
           data: json.encode(task.toJson()),
           read: ['*'],
           write: ['*']);
@@ -132,7 +132,7 @@ class WebClient {
 
     try {
       await database.deleteDocument(
-          collectionId: COLLECTION_ID, documentId: documentId);
+          collectionId: DATABASE_COLLECTION_ID, documentId: documentId);
     } catch (e) {
       print(e.toString());
     }
@@ -153,7 +153,7 @@ class WebClient {
     Database database = Database(client);
     try {
       Response<dynamic> result = await database.updateDocument(
-        collectionId: COLLECTION_ID,
+        collectionId: DATABASE_COLLECTION_ID,
         documentId: documentId,
         data: json.encode(task.toJson()),
         read: ['*'],
@@ -168,9 +168,9 @@ class WebClient {
 
   // Get document id
   Future<String> getDocumentID(String taskId) async {
+    Client client = Client(selfSigned: true);
     String documentId;
 
-    Client client = Client(selfSigned: true);
     client
             .setEndpoint(API_ENDPOINT) // Your API Endpoint
             .setProject(PROJECT_ID) // Your project ID
@@ -179,8 +179,8 @@ class WebClient {
     Database database = Database(client);
 
     try {
-      Response<dynamic> result = await database
-          .listDocuments(collectionId: COLLECTION_ID, filters: ['id=$taskId']);
+      Response<dynamic> result = await database.listDocuments(
+          collectionId: DATABASE_COLLECTION_ID, filters: ['id=$taskId']);
 
       documentId = await result.data['documents'][0]['\$id'];
     } catch (e) {
@@ -189,5 +189,207 @@ class WebClient {
       //  return documentId;
     }
     return documentId;
+  }
+
+  // Signup a user and also create an account session.
+  Future<String> signup(
+      String email, String password, String name, String phone) async {
+    Client client = Client(selfSigned: true);
+    String uid;
+    String errorMessage;
+
+    client
+            .setEndpoint(API_ENDPOINT) // Your API Endpoint
+            .setProject(PROJECT_ID) // Your project ID
+        ;
+
+    Account account = Account(client);
+    try {
+      Response<dynamic> result = await account.create(
+          email: '$email', password: '$password', name: '$name');
+      uid = result.data['registration'].toString();
+      if (uid != null) {
+        //Create user session after succesfully signing up
+        await createUserSession(email, password);
+
+        /// Save user [email, name, phone] to appwrite
+        await saveUserDetails(email, name, phone);
+      }
+    } catch (error) {
+      switch (error.response.data['code'].toString()) {
+        case "429":
+          errorMessage = "Too may request. Try again later";
+          break;
+        case "409":
+          errorMessage = "Account Already Exists";
+          break;
+        case "401":
+          errorMessage = "Unauthorized user";
+          break;
+        default:
+          errorMessage = "Something went wrong";
+      }
+    }
+    if (errorMessage != null) {
+      return Future.error(errorMessage);
+    }
+    return uid;
+  }
+
+  // Create user session after signup
+  Future<bool> createUserSession(String email, String password) async {
+    Client client = Client(selfSigned: true);
+    String errorMessage;
+    client
+            .setEndpoint(API_ENDPOINT) // Your API Endpoint
+            .setProject(PROJECT_ID) // Your project ID
+        ;
+
+    Account account = Account(client);
+
+    try {
+      Response<dynamic> result = await account.createSession(
+        email: email,
+        password: password,
+      );
+      print(result);
+      if (result.statusCode == 201) {
+        print('cre');
+        return true;
+      } else {
+        print('failed to create user session');
+        return false;
+      }
+    } catch (error) {
+      print(error);
+
+      switch (error.response.data['code'].toString()) {
+        case "429":
+          errorMessage = "Too may request. Try again later";
+          break;
+        case "409":
+          errorMessage = "Account Already Exists";
+          break;
+        case "401":
+          errorMessage = "Invalid email / password";
+          break;
+        default:
+          errorMessage = "Something went wrong";
+      }
+    }
+
+    if (errorMessage != null) {
+      return Future.error(errorMessage);
+    }
+    return false;
+  }
+
+  // Save User information into the database
+  Future saveUserDetails(String email, String name, String phone) async {
+    Client client = Client(selfSigned: true);
+    // Get current logged in user ID
+    final userID = await getCurrentUser();
+    client
+            .setEndpoint(API_ENDPOINT) // Your API Endpoint
+            .setProject(PROJECT_ID) // Your project ID
+        ;
+
+    Database database = Database(client);
+
+    try {
+      await database.createDocument(
+          collectionId: USER_COLLECTION_ID,
+          data: {'uid': userID, 'email': email, 'name': name, 'phone': phone},
+          read: ['*'],
+          write: ['*']);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  // Get user information
+  Future<UserEntity> getUserInfo() async {
+    Client client = Client(selfSigned: true);
+    // Get current logged in user ID
+    final userID = await getCurrentUser();
+
+    Map<String, dynamic> json = {};
+
+    client
+            .setEndpoint(API_ENDPOINT) // Your API Endpoint
+            .setProject(PROJECT_ID) // Your project ID
+        ;
+
+    Database database = Database(client);
+
+    try {
+      Response<dynamic> result = await database.listDocuments(
+          collectionId: USER_COLLECTION_ID, filters: ['uid=$userID']);
+
+      json = await result.data['documents'][0];
+
+      return UserEntity.fromJson(json);
+    } catch (e) {
+      print(e.toString());
+      //TODO:: display error instead
+      return UserEntity.fromJson(json);
+    }
+  }
+
+  // Check if user session is active.
+  Future<bool> isSignedIn() async {
+    String session = await getSession();
+    if (session != null) {
+      return true;
+    }
+    return false;
+  }
+
+  // Get current session
+  Future<String> getSession() async {
+    Client client = Client(selfSigned: true);
+    String sessionId;
+    client
+            .setEndpoint(API_ENDPOINT) // Your API Endpoint
+            .setProject(PROJECT_ID) // Your project ID
+        ;
+    Account account = Account(client);
+    try {
+      Response<dynamic> result = await account.getSessions();
+      if (result.statusCode == 200) {
+        sessionId = result.data[0]['\$id'];
+      } else {
+        sessionId = null;
+      }
+    } catch (error) {
+      sessionId = null;
+    }
+    return sessionId;
+  }
+
+  //Signout and end current session
+  signOut() async {
+    Client client = Client(selfSigned: true);
+    String session = await getSession();
+
+    if (session != null) {
+      Account account = Account(client);
+
+      client
+              .setEndpoint(API_ENDPOINT) // Your API Endpoint
+              .setProject(PROJECT_ID) // Your project ID
+          ;
+
+      Future result = account.deleteSession(
+        sessionId: session,
+      );
+
+      result.then((response) async {
+        print('logged out');
+        print(response);
+      }).catchError((error) {
+        print(error.response);
+      });
+    }
   }
 }

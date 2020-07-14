@@ -14,7 +14,7 @@ class FilteredTasksBloc extends Bloc<FilteredTasksEvent, FilteredTasksState> {
   final TasksBloc tasksBloc;
   StreamSubscription tasksSubscription;
   final TasksRepositoryFlutter tasksRepository;
-  final UserRepository userRepository;
+  final UserRepositoryFlutter userRepository;
 
   FilteredTasksBloc(
       {@required this.tasksBloc,
