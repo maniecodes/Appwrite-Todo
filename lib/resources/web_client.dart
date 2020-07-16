@@ -1,29 +1,26 @@
 import 'dart:convert';
 
 import 'package:appwrite/appwrite.dart';
-import 'package:appwrite/client.dart';
+import 'package:appwrite/client.dart' as http;
+import 'package:meta/meta.dart';
 
 import '../models/models.dart';
 
 class WebClient {
   // static const API_ENDPOINT = "http://192.168.1.100/v1";
   static const API_ENDPOINT = "http://10.0.2.2/v1";
+  final http.Client client;
 
   // static const API_ENDPOINT = "http://127.0.0.1/v1";
   static const PROJECT_ID = "5eeafe5ee3d2c";
   static const DATABASE_COLLECTION_ID = "5eeb001ebd987";
   static const USER_COLLECTION_ID = "5eeafe9b73454";
-
-  const WebClient();
+  const WebClient({@required this.client}) : assert(client != null);
 
   Future<String> getCurrentUser() async {
     String uid;
     String errorMessage;
-    Client client = Client(selfSigned: true);
-    client
-            .setEndpoint(API_ENDPOINT) // Your API Endpoint
-            .setProject(PROJECT_ID) // Your project ID
-        ;
+    client.setEndpoint(API_ENDPOINT).setProject(PROJECT_ID);
     Account account = Account(client);
     try {
       Response<dynamic> result = await account.get();
@@ -53,7 +50,6 @@ class WebClient {
 
   // Get task attached to a user.
   Future<List<TaskEntity>> fetchTasks(String userId) async {
-    Client client = Client(selfSigned: true);
     client
             .setEndpoint(API_ENDPOINT) // Your API Endpoint
             .setProject(PROJECT_ID) // Your project ID
@@ -76,8 +72,6 @@ class WebClient {
 
   Future<UserEntity> fetchUserInfo(String userID) async {
     Map<String, dynamic> json = {};
-
-    Client client = Client(selfSigned: true);
     client
             .setEndpoint(API_ENDPOINT) // Your API Endpoint
             .setProject("5eeafe5ee3d2c") // Your project ID
@@ -100,7 +94,6 @@ class WebClient {
 
   // Save task into the database
   Future<bool> postTasks(TaskEntity task) async {
-    Client client = Client(selfSigned: true);
     client
             .setEndpoint(API_ENDPOINT) // Your API Endpoint
             .setProject(PROJECT_ID) // Your project ID
@@ -121,7 +114,6 @@ class WebClient {
 
   // Delete task from the database
   Future<bool> deleteTasks(String taskId) async {
-    Client client = Client(selfSigned: true);
     client
             .setEndpoint(API_ENDPOINT) // Your API Endpoint
             .setProject(PROJECT_ID) // Your project ID
@@ -142,7 +134,6 @@ class WebClient {
 
   // Update a task on the database
   Future<bool> updateTasks(String taskId, TaskEntity task) async {
-    Client client = Client(selfSigned: true);
     client
             .setEndpoint(API_ENDPOINT) // Your API Endpoint
             .setProject(PROJECT_ID) // Your project ID
@@ -168,7 +159,6 @@ class WebClient {
 
   // Get document id
   Future<String> getDocumentID(String taskId) async {
-    Client client = Client(selfSigned: true);
     String documentId;
 
     client
@@ -194,7 +184,6 @@ class WebClient {
   // Signup a user and also create an account session.
   Future<String> signup(
       String email, String password, String name, String phone) async {
-    Client client = Client(selfSigned: true);
     String uid;
     String errorMessage;
 
@@ -238,7 +227,6 @@ class WebClient {
 
   // Create user session after signup
   Future<bool> createUserSession(String email, String password) async {
-    Client client = Client(selfSigned: true);
     String errorMessage;
     client
             .setEndpoint(API_ENDPOINT) // Your API Endpoint
@@ -286,7 +274,6 @@ class WebClient {
 
   // Save User information into the database
   Future saveUserDetails(String email, String name, String phone) async {
-    Client client = Client(selfSigned: true);
     // Get current logged in user ID
     final userID = await getCurrentUser();
     client
@@ -309,7 +296,6 @@ class WebClient {
 
   // Get user information
   Future<UserEntity> getUserInfo() async {
-    Client client = Client(selfSigned: true);
     // Get current logged in user ID
     final userID = await getCurrentUser();
 
@@ -347,7 +333,6 @@ class WebClient {
 
   // Get current session
   Future<String> getSession() async {
-    Client client = Client(selfSigned: true);
     String sessionId;
     client
             .setEndpoint(API_ENDPOINT) // Your API Endpoint
@@ -369,7 +354,6 @@ class WebClient {
 
   //Signout and end current session
   signOut() async {
-    Client client = Client(selfSigned: true);
     String session = await getSession();
 
     if (session != null) {

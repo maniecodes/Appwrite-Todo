@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:appwrite/client.dart' as http;
 import './screens/screens.dart';
 import './utils/utils.dart';
 import './authentication/authentication.dart';
@@ -12,13 +13,16 @@ import './widgets/widgets.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  final UserRepositoryFlutter userRepository = UserRepositoryFlutter();
-  final TasksRepositoryFlutter taskRepository = TasksRepositoryFlutter(
-      // fileStorage: const FileStorage(
-      //   '__task_app__',
-      //   getApplicationDocumentsDirectory,
-      // ),
-      );
+
+  final UserRepositoryFlutter userRepository =
+      UserRepositoryFlutter(webClient: WebClient(client: http.Client()));
+  final TasksRepositoryFlutter taskRepository =
+      TasksRepositoryFlutter(webClient: WebClient(client: http.Client())
+          // fileStorage: const FileStorage(
+          //   '__task_app__',
+          //   getApplicationDocumentsDirectory,
+          // ),
+          );
   BlocSupervisor.delegate = SimpleBlocDelegate();
   runApp(MultiBlocProvider(
     providers: [

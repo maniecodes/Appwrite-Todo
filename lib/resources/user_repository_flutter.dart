@@ -1,17 +1,13 @@
+import 'package:flutter/material.dart';
+
 import '../resources/repository.dart';
 import '../models/models.dart';
 
-/// A class that glues together our local file storage and web client. It has a
-/// clear responsibility: Load Todos and Persist todos.
 class UserRepositoryFlutter implements UserRepository {
   final WebClient webClient;
 
-  const UserRepositoryFlutter({
-    this.webClient = const WebClient(),
-  });
+  const UserRepositoryFlutter({@required this.webClient}) : assert(webClient != null);
 
-  /// Loads tasks first from File storage. If they don't exist or encounter an
-  /// error, it attempts to load the Todos from a Web Client.
   @override
   Future<String> signup(
       String email, String password, String name, String phone) async {
