@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import '../resources/repository.dart';
 import '../models/models.dart';
 
-
 class TasksRepositoryFlutter implements TaskRepository {
   final WebClient webClient;
 
   const TasksRepositoryFlutter({@required this.webClient})
       : assert(webClient != null);
-
 
   @override
   Future<List<TaskEntity>> loadTasks() async {

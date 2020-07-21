@@ -1,1 +1,1 @@
-enum VisibilityFilter { all, active, completed, searched }
+enum VisibilityFilter { all, active, favourite, completed, searched }

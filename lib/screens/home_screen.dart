@@ -1,3 +1,4 @@
+import 'package:appwrite_project/widgets/filter_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../widgets/widgets.dart';
@@ -21,15 +22,14 @@ class HomeScreen extends StatelessWidget {
         final filteredTasks = state.filteredTasks;
         final user = state.user;
         final tasks = state.allTasks;
-        print('filtered tasks');
-        print(filteredTasks);
-        print('all tasks');
-        print(state.allTasks);
 
         return Scaffold(
           // backgroundColor: Colors.white,
           appBar: AppBar(
             title: Text(FlutterBlocLocalizations.of(context).appTitle),
+            actions: [
+              FilterButton(visible: true),
+            ],
           ),
 
           drawer: AppDrawer(tasks: tasks, user: user),

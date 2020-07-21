@@ -111,6 +111,8 @@ class FilteredTasksBloc extends Bloc<FilteredTasksEvent, FilteredTasksState> {
         return true;
       } else if (filter == VisibilityFilter.active) {
         return !task.complete;
+      } else if (filter == VisibilityFilter.favourite) {
+        return task.favourite;
       } else {
         return task.complete;
       }

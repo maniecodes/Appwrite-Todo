@@ -1,3 +1,4 @@
+import 'package:appwrite_project/widgets/filter_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../blocs/blocs.dart';
@@ -32,7 +33,6 @@ class FilteredTasks extends StatelessWidget {
                 ),
                 title: TextField(
                   onChanged: (value) {
-                    print(value);
                     BlocProvider.of<FilteredTasksBloc>(context)
                         .add(SearchTasks(searchTerm: value));
                   },
@@ -40,10 +40,6 @@ class FilteredTasks extends StatelessWidget {
                     hintText: "Search All",
                     border: InputBorder.none,
                   ),
-                ),
-                trailing: Icon(
-                  Icons.filter_list,
-                  color: Colors.blue,
                 ),
               ),
             ),
@@ -57,7 +53,7 @@ class FilteredTasks extends StatelessWidget {
               final task = tasks[index];
               return TaskItem(
                 task: task,
-                onDismissed: (direction) {
+                onDismissed: (direction) async {
                   BlocProvider.of<TasksBloc>(context).add(TaskDeleted(task));
                   Scaffold.of(context).showSnackBar(DeleteTaskSnackBar(
                       task: task,

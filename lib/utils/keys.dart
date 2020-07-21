@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class TasksKeys {
   // Home Screens
@@ -32,6 +32,7 @@ class TasksKeys {
   static const filterButton = Key('__filterButton__');
   static const allFilter = Key('__allFilter__');
   static const activeFilter = Key('__activeFilter__');
+  static const favouriteFilter = Key('__favouriteFilter__');
   static const completedFilter = Key('__completedFilter__');
 
   // Stats
