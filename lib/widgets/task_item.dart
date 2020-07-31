@@ -1,6 +1,9 @@
-import 'package:appwrite_project/models/task.dart';
-import 'package:appwrite_project/utils/keys.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:timeago/timeago.dart';
+import 'package:time_formatter/time_formatter.dart';
+import '../utils/utils.dart';
+import '../models/models.dart';
 
 class TaskItem extends StatelessWidget {
   final DismissDirectionCallback onDismissed;
@@ -20,6 +23,10 @@ class TaskItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var parsedDate =
+        DateTime.parse(task.createdDateTime).millisecondsSinceEpoch;
+    String formatted = formatTime(parsedDate);
+
     return Dismissible(
       key: TasksKeys.taskItem(task.id),
       onDismissed: onDismissed,
@@ -78,24 +85,27 @@ class TaskItem extends StatelessWidget {
                                         task.description,
                                         style: TextStyle(
                                             fontSize: 12.0,
-                                            color: Colors.black26),
+                                            color: Colors.black54),
                                       ),
                                       Text(
                                         ' - ',
                                         style: TextStyle(
                                             fontSize: 12.0,
-                                            color: Colors.black26),
+                                            color: Colors.black54),
                                       ),
                                       Icon(
                                         Icons.calendar_today,
-                                        color: Colors.black26,
+                                        color: Colors.black54,
                                         size: 10.0,
                                       ),
+                                      SizedBox(
+                                        width: 2,
+                                      ),
                                       Text(
-                                        ' Fri, Jun 12',
+                                        formatted,
                                         style: TextStyle(
                                             fontSize: 12.0,
-                                            color: Colors.black26),
+                                            color: Colors.black54),
                                       ),
                                     ],
                                   ),

@@ -19,12 +19,10 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
   @override
   Stream<TasksState> mapEventToState(TasksEvent event) async* {
     if (event is TasksLoaded) {
-      print('task loaded');
       yield* _mapTasksLoadedToState();
     } else if (event is TaskAdded) {
       yield* _mapTaskAddedToState(event);
     } else if (event is TaskUpdated) {
-      print('task updated');
       yield* _mapTaskUpdatedToState(event);
     } else if (event is TaskDeleted) {
       yield* _mapTaskDeletedToState(event);
@@ -32,7 +30,6 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
   }
 
   Stream<TasksState> _mapTasksLoadedToState() async* {
-    print('loading task state');
     try {
       final users = await this.tasksRepository.getUserInfo();
       final tasks = await this.tasksRepository.loadTasks();
@@ -47,20 +44,21 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     if (state is TasksLoadSuccess) {
       await _saveTasksToAppwrite(event.task);
       final List<Task> updatedTasks =
-          List.from((state as TasksLoadSuccess).tasks)..add(event.task);
-      final users = await this.tasksRepository.getUserInfo();
-      yield TasksLoadSuccess(updatedTasks, User.fromEntity(users));
+          List.from((state as TasksLoadSuccess).tasks.reversed.toList())
+            ..add(event.task);
+      final User user = (state as TasksLoadSuccess).user;
+      yield TasksLoadSuccess(updatedTasks.reversed.toList(), user);
     }
   }
 
   Stream<TasksState> _mapTaskUpdatedToState(TaskUpdated event) async* {
     if (state is TasksLoadSuccess) {
-      final users = await this.tasksRepository.getUserInfo();
+      final User user = (state as TasksLoadSuccess).user;
       final List<Task> updatedTasks =
           (state as TasksLoadSuccess).tasks.map((task) {
         return task.id == event.task.id ? event.task : task;
       }).toList();
-      yield TasksLoadSuccess(updatedTasks, User.fromEntity(users));
+      yield TasksLoadSuccess(updatedTasks, user);
       _updateTasksOnAppwrite(event.task.id, event.task);
     }
   }
@@ -71,8 +69,8 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
           .tasks
           .where((task) => task.id != event.task.id)
           .toList();
-      final users = await this.tasksRepository.getUserInfo();
-      yield TasksLoadSuccess(updatedTasks, User.fromEntity(users));
+      final User user = (state as TasksLoadSuccess).user;
+      yield TasksLoadSuccess(updatedTasks, user);
       _deleteTasksFromAppwrite(event.task.id);
     }
   }
@@ -82,7 +80,6 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
   }
 
   Future _deleteTasksFromAppwrite(String taskId) {
-    print('delete taks from appwrite: $taskId');
     return tasksRepository.deleteTasksFromAppwrite(taskId);
   }
 

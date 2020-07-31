@@ -56,17 +56,20 @@ class WebClient {
         ;
     Database database = Database(client);
     print('fetch all task');
+
     try {
       Response<dynamic> result = await database.listDocuments(
-          collectionId: DATABASE_COLLECTION_ID, filters: ['uid=$userId']);
+          collectionId: DATABASE_COLLECTION_ID,
+          filters: ['uid=$userId'],
+          orderField: 'createdDateTime',
+          orderType: OrderType.desc);
       final json = result.data['documents'];
       final tasks =
           (json).map<TaskEntity>((task) => TaskEntity.fromJson(task)).toList();
       return tasks;
     } catch (e) {
       print(e.toString());
-      //TODO:: display error instead
-      // return TaskEntity.fromJson(json);
+      //TODO:: display error
     }
   }
 
@@ -89,6 +92,38 @@ class WebClient {
       print(e.toString());
       //TODO:: display error instead
       return UserEntity.fromJson(json);
+    }
+  }
+
+  //
+  Future<List<TaskEntity>> searchTasks(String search) async {
+    final userID = await getCurrentUser();
+    client
+            .setEndpoint(API_ENDPOINT) // Your API Endpoint
+            .setProject(PROJECT_ID) // Your project ID
+        ;
+
+    Database database = Database(client);
+    print('sera all task');
+    print(search);
+
+    try {
+      Response<dynamic> result = await database.listDocuments(
+          collectionId: DATABASE_COLLECTION_ID,
+          filters: ['uid=$userID'],
+          orderField: 'createdDateTime',
+          orderType: OrderType.desc,
+          search: search);
+      final json = result.data['documents'];
+      final tasks =
+          (json).map<TaskEntity>((task) => TaskEntity.fromJson(task)).toList();
+      print('searching');
+      print(tasks);
+      print('end');
+      return tasks;
+    } catch (e) {
+      print(e.toString());
+      //TODO:: display error
     }
   }
 

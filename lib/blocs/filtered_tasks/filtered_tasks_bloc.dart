@@ -34,10 +34,8 @@ class FilteredTasksBloc extends Bloc<FilteredTasksEvent, FilteredTasksState> {
   @override
   Stream<FilteredTasksState> mapEventToState(FilteredTasksEvent event) async* {
     if (event is FilterUpdated) {
-      print('fliter updated');
       yield* _mapFilterUpdatedToState(event);
     } else if (event is TasksUpdated) {
-      print('task updated');
       yield* _mapTasksUpdatedToState(event);
     } else if (event is SearchTasks) {
       yield* _mapSearchTasksToState(event.searchTerm);
@@ -48,7 +46,6 @@ class FilteredTasksBloc extends Bloc<FilteredTasksEvent, FilteredTasksState> {
     FilterUpdated event,
   ) async* {
     if (tasksBloc.state is TasksLoadSuccess) {
-      print('this task is loaded success');
       yield FilteredTasksLoadSuccess(
           _mapTasksToFilteredTasks(
             (tasksBloc.state as TasksLoadSuccess).tasks,
@@ -63,13 +60,18 @@ class FilteredTasksBloc extends Bloc<FilteredTasksEvent, FilteredTasksState> {
   Stream<FilteredTasksState> _mapSearchTasksToState(String event) async* {
     final users = await this.tasksRepository.getUserInfo();
     List<Task> tasks = (tasksBloc.state as TasksLoadSuccess).tasks;
-    List<Task> listTask = tasks
-        .where((task) =>
-            event.trim().toLowerCase().contains(task.title.toLowerCase()))
-        .toList();
+    final listTask = await this.tasksRepository.searchTasks(event.trim());
+
+    // List<Task> listTask = tasks
+    //     .where((task) =>
+    //         event.trim().toLowerCase().contains(task.title.toLowerCase()))
+    //     .toList();
+    //call api to search list of task
+    //List<Task> listTask = await this.tasksRepository.searchTasks(event.trim());
+    print(listTask);
     if (event.length > 0) {
-      yield FilteredTasksLoadSuccess(
-          listTask, tasks, VisibilityFilter.all, User.fromEntity(users));
+      yield FilteredTasksLoadSuccess(listTask.map(Task.fromEntity).toList(),
+          tasks, VisibilityFilter.all, User.fromEntity(users));
     } else {
       yield FilteredTasksLoadSuccess(
           _mapTasksToFilteredTasks(

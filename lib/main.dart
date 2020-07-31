@@ -30,7 +30,6 @@ void main() {
         create: (context) => AuthenticationBloc(
           userRepository: userRepository,
         )..add(AppStarted()),
-        //   child: TaskApp(userRepository: userRepository),
       ),
       BlocProvider(create: (context) {
         return TasksBloc(
@@ -43,8 +42,6 @@ void main() {
       taskRepository: taskRepository,
     ),
   ));
-
-  // child: TaskApp(userRepository: userRepository),
 }
 
 class TaskApp extends StatelessWidget {

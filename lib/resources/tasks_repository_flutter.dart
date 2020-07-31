@@ -22,6 +22,16 @@ class TasksRepositoryFlutter implements TaskRepository {
     }
   }
 
+  @override
+  Future<List<TaskEntity>> searchTasks(String search) async {
+    try {
+      return await webClient.searchTasks(search);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  @override
   Future<UserEntity> getUserInfo() async {
     // Get current logged in user ID
     String userId = await getCurrentUser();

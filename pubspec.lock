@@ -7,7 +7,7 @@ packages:
       name: appwrite
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.2"
+    version: "0.2.3"
   archive:
     dependency: transitive
     description:
@@ -366,6 +366,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.15"
+  time_formatter:
+    dependency: "direct main"
+    description:
+      name: time_formatter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0+5"
+  timeago:
+    dependency: "direct main"
+    description:
+      name: timeago
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.26"
   typed_data:
     dependency: transitive
     description:
