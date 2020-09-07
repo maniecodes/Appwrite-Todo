@@ -182,12 +182,13 @@ class _LoginState extends State<Login> {
                               spreadRadius: 2)
                         ],
                         gradient: LinearGradient(
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            colors: [
-                              HexColor('#223FA1'),
-                              HexColor('#223FA1'),
-                            ])),
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          colors: [
+                            HexColor('#223FA1'),
+                            HexColor('#223FA1'),
+                          ],
+                        )),
                     child: Text(
                       'Login',
                       style: TextStyle(
