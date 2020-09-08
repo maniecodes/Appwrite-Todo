@@ -32,6 +32,9 @@ Appwrite provides you with a set of APIs, tools, and a management console UI to 
 
 ![Image](assets/images/addtask.png)
 
+<img src="assets/images/addtask.png" height="300em">
+<img src="assets/src/appwrite.gif" height="300em">
+
 <!-- <p float="left">
   <img src="https://github.com/Dev-Manny/Appwrite-Todo/tree/master/assets/images/addtask.png"  />
   <img src="https://github.com/Dev-Manny/Appwrite-Todo/tree/master/assets/images/favourite.png"  />
