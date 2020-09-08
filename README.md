@@ -30,17 +30,11 @@ Appwrite provides you with a set of APIs, tools, and a management console UI to 
 
 ## Screenshots
 
-![Image](assets/images/addtask.png)
+<img src="assets/images/addtask.png" height="300em"><img src="assets/images/favourite.png" height="300em"><img src="assets/images/home.png" height="300em"><img src="assets/images/tasklist.png" height="300em">
 
-<img src="assets/images/addtask.png" height="300em">
+## Demo
+
 <img src="assets/src/appwrite.gif" height="300em">
-
-<!-- <p float="left">
-  <img src="https://github.com/Dev-Manny/Appwrite-Todo/tree/master/assets/images/addtask.png"  />
-  <img src="https://github.com/Dev-Manny/Appwrite-Todo/tree/master/assets/images/favourite.png"  />
-  <img src="https://github.com/Dev-Manny/Appwrite-Todo/tree/master/assets/images/home.png"  />
-  <img src="https://github.com/Dev-Manny/Appwrite-Todo/tree/master/assets/images/tasklist.png"  />
-</p> -->
 
 ## Installation
 
