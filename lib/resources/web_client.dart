@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:appwrite/appwrite.dart';
-import 'package:appwrite/client.dart' as http;
 import 'package:meta/meta.dart';
 
 import '../models/models.dart';
@@ -9,13 +8,13 @@ import '../models/models.dart';
 class WebClient {
   // static const API_ENDPOINT = "http://192.168.1.100/v1";
   static const API_ENDPOINT = "http://10.0.2.2/v1";
-  final http.Client client;
+  final Client client = Client();
 
   // static const API_ENDPOINT = "http://127.0.0.1/v1";
   static const PROJECT_ID = "5eeafe5ee3d2c";
   static const DATABASE_COLLECTION_ID = "5eeb001ebd987";
   static const USER_COLLECTION_ID = "5eeafe9b73454";
-  const WebClient({@required this.client}) : assert(client != null);
+  WebClient({@required client}) : assert(client != null);
 
   Future<String> getCurrentUser() async {
     String uid;
@@ -64,6 +63,7 @@ class WebClient {
           orderField: 'createdDateTime',
           orderType: OrderType.desc);
       final json = result.data['documents'];
+      print(json);
       final tasks =
           (json).map<TaskEntity>((task) => TaskEntity.fromJson(task)).toList();
       return tasks;
@@ -138,7 +138,7 @@ class WebClient {
     try {
       await database.createDocument(
           collectionId: DATABASE_COLLECTION_ID,
-          data: json.encode(task.toJson()),
+          data: task.toJson(),
           read: ['*'],
           write: ['*']);
     } catch (e) {
@@ -179,7 +179,7 @@ class WebClient {
       Response<dynamic> result = await database.updateDocument(
         collectionId: DATABASE_COLLECTION_ID,
         documentId: documentId,
-        data: json.encode(task.toJson()),
+        data: task.toJson(),
         read: ['*'],
         write: ['*'],
       );

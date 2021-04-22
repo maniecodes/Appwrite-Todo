@@ -23,16 +23,13 @@ class DrawerBloc extends Bloc<DrawerEvent, DrawerState> {
       {@required this.tasksBloc, this.userRepository, this.tasksRepository})
       : assert(tasksBloc != null),
         assert(userRepository != null),
-        assert(tasksRepository != null) {
-    tasksSubscription = tasksBloc.listen((state) {
+        assert(tasksRepository != null), super(DrawerLoadInProgress()) {
+    tasksSubscription = tasksBloc.stream.listen((state) {
       if (state is TasksLoadSuccess) {
         add(DrawerUpdated(state.tasks));
       }
     });
   }
-
-  @override
-  get initialState => DrawerLoadInProgress();
 
   @override
   Stream<DrawerState> mapEventToState(DrawerEvent event) async* {

@@ -33,7 +33,7 @@ class _LoginState extends State<Login> {
 
     return BlocListener<LoginBloc, LoginState>(listener: (context, state) {
       if (state is LoginFailure) {
-        Scaffold.of(context)
+        ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
           ..showSnackBar(
             SnackBar(
@@ -89,6 +89,7 @@ class _LoginState extends State<Login> {
                     ],
                   ),
                   child: TextFormField(
+                    autovalidateMode: AutovalidateMode.always,
                     controller: _emailController,
                     style: TextStyle(
                         fontSize: 20.0, height: 2.0, color: Colors.black),
@@ -106,8 +107,6 @@ class _LoginState extends State<Login> {
                           borderSide:
                               BorderSide(color: Colors.white, width: 1.0)),
                     ),
-                    //  obscureText: true,
-                    autovalidate: true,
                     autocorrect: false,
                   ),
                 ),
@@ -126,6 +125,7 @@ class _LoginState extends State<Login> {
                     ],
                   ),
                   child: TextFormField(
+                    autovalidateMode: AutovalidateMode.always,
                     controller: _passwordController,
                     style: TextStyle(
                         fontSize: 20.0, height: 2.0, color: Colors.black),
@@ -144,7 +144,6 @@ class _LoginState extends State<Login> {
                               BorderSide(color: Colors.white, width: 1.0)),
                     ),
                     obscureText: true,
-                    autovalidate: true,
                     autocorrect: false,
                   ),
                 ),

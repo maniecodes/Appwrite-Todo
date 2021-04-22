@@ -19,17 +19,15 @@ class FilteredTasksBloc extends Bloc<FilteredTasksEvent, FilteredTasksState> {
   FilteredTasksBloc(
       {@required this.tasksBloc,
       @required this.tasksRepository,
-      @required this.userRepository}) {
-    tasksSubscription = tasksBloc.listen((state) {
+      @required this.userRepository})
+      : super(FilteredTasksLoadInProgress()) {
+    tasksSubscription = tasksBloc.stream.listen((state) {
       if (state is TasksLoadSuccess) {
         add(TasksUpdated((tasksBloc.state as TasksLoadSuccess).tasks,
             (tasksBloc.state as TasksLoadSuccess).user));
       }
     });
   }
-
-  @override
-  FilteredTasksState get initialState => FilteredTasksLoadInProgress();
 
   @override
   Stream<FilteredTasksState> mapEventToState(FilteredTasksEvent event) async* {

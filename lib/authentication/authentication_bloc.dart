@@ -11,10 +11,8 @@ class AuthenticationBloc
   final UserRepositoryFlutter userRepository;
 
   AuthenticationBloc({@required this.userRepository})
-      : assert(userRepository != null);
+      : assert(userRepository != null), super(AuthenticationUninitialized());
 
-  @override
-  AuthenticationState get initialState => AuthenticationUninitialized();
 
   @override
   Stream<AuthenticationState> mapEventToState(

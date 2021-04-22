@@ -66,7 +66,7 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                         ],
                       ),
                       child: TextFormField(
-                        initialValue: isEditing ? widget.task.title : '',
+                        autovalidateMode: AutovalidateMode.always, initialValue: isEditing ? widget.task.title : '',
                         key: TasksKeys.titleField,
                         style: TextStyle(
                             fontSize: 20.0, height: 2.0, color: Colors.black),
@@ -85,7 +85,6 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                               borderSide:
                                   BorderSide(color: Colors.white, width: 1.0)),
                         ),
-                        autovalidate: true,
                         autocorrect: false,
                         // validator: (val) {
                         //   return val.trim().isEmpty
@@ -110,7 +109,7 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                         ],
                       ),
                       child: TextFormField(
-                        initialValue: isEditing ? widget.task.description : '',
+                        autovalidateMode: AutovalidateMode.always, initialValue: isEditing ? widget.task.description : '',
                         key: TasksKeys.titleField,
                         style: TextStyle(
                             fontSize: 20.0, height: 2.0, color: Colors.black),
@@ -130,7 +129,6 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                               borderSide:
                                   BorderSide(color: Colors.white, width: 1.0)),
                         ),
-                        autovalidate: true,
                         autocorrect: false,
                         onSaved: (value) => _description = value,
                       ),

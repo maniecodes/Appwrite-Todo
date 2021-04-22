@@ -77,7 +77,7 @@ class FilteredTasks extends StatelessWidget {
               return TaskDetailsScreen(id: task.id);
             }));
             if (removeTask != null) {
-              Scaffold.of(context).showSnackBar(DeleteTaskSnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(DeleteTaskSnackBar(
                 key: TasksKeys.snackbar,
                 task: task,
                 onUndo: () =>

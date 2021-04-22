@@ -18,10 +18,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     @required this.userRepository,
     @required this.authenticationBloc,
   })  : assert(userRepository != null),
-        assert(authenticationBloc != null);
-
-  @override
-  RegistrationState get initialState => RegistrationInitial();
+        assert(authenticationBloc != null), super(RegistrationInitial());
 
   Stream<RegistrationState> mapEventToState(RegistrationEvent event) async* {
     if (event is RegistrationButtonPressed) {

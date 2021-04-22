@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:appwrite/client.dart' as http;
+import 'package:appwrite/appwrite.dart';
 import './screens/screens.dart';
 import './utils/utils.dart';
 import './authentication/authentication.dart';
@@ -14,16 +14,17 @@ import './widgets/widgets.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
+  Client client = Client();
   final UserRepositoryFlutter userRepository =
-      UserRepositoryFlutter(webClient: WebClient(client: http.Client()));
+      UserRepositoryFlutter(webClient: WebClient(client: client));
   final TasksRepositoryFlutter taskRepository =
-      TasksRepositoryFlutter(webClient: WebClient(client: http.Client())
+      TasksRepositoryFlutter(webClient: WebClient(client: client)
           // fileStorage: const FileStorage(
           //   '__task_app__',
           //   getApplicationDocumentsDirectory,
           // ),
           );
-  BlocSupervisor.delegate = SimpleBlocDelegate();
+  Bloc.observer = SimpleBlocObserver();
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider<AuthenticationBloc>(

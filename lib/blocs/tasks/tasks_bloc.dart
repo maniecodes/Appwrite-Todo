@@ -11,10 +11,8 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
   final TasksRepositoryFlutter tasksRepository;
   final UserRepositoryFlutter userRepository;
 
-  TasksBloc({@required this.tasksRepository, this.userRepository});
-
-  @override
-  TasksState get initialState => TasksLoadInProgress();
+  TasksBloc({@required this.tasksRepository, this.userRepository})
+      : super(TasksLoadInProgress());
 
   @override
   Stream<TasksState> mapEventToState(TasksEvent event) async* {

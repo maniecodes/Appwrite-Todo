@@ -36,7 +36,7 @@ class _RegistrationState extends State<Registration> {
     return BlocListener<RegistrationBloc, RegistrationState>(
       listener: (context, state) {
         if (state is RegistrationFailure) {
-          Scaffold.of(context)
+          ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(
@@ -84,6 +84,7 @@ class _RegistrationState extends State<Registration> {
                       ],
                     ),
                     child: TextFormField(
+                      autovalidateMode: AutovalidateMode.always,
                       controller: _nameController,
                       style: TextStyle(
                           fontSize: 20.0, height: 2.0, color: Colors.black),
@@ -102,8 +103,6 @@ class _RegistrationState extends State<Registration> {
                             borderSide:
                                 BorderSide(color: Colors.white, width: 1.0)),
                       ),
-                      //  obscureText: true,
-                      autovalidate: true,
                       autocorrect: false,
                     ),
                   ),
@@ -122,6 +121,7 @@ class _RegistrationState extends State<Registration> {
                       ],
                     ),
                     child: TextFormField(
+                      autovalidateMode: AutovalidateMode.always,
                       controller: _phoneNumberController,
                       keyboardType: TextInputType.number,
                       style: TextStyle(
@@ -141,8 +141,6 @@ class _RegistrationState extends State<Registration> {
                             borderSide:
                                 BorderSide(color: Colors.white, width: 1.0)),
                       ),
-                      //  obscureText: true,
-                      autovalidate: true,
                       autocorrect: false,
                     ),
                   ),
@@ -161,6 +159,7 @@ class _RegistrationState extends State<Registration> {
                       ],
                     ),
                     child: TextFormField(
+                      autovalidateMode: AutovalidateMode.always,
                       controller: _emailController,
                       style: TextStyle(
                           fontSize: 20.0, height: 2.0, color: Colors.black),
@@ -179,8 +178,6 @@ class _RegistrationState extends State<Registration> {
                             borderSide:
                                 BorderSide(color: Colors.white, width: 1.0)),
                       ),
-                      // obscureText: true,
-                      autovalidate: true,
                       autocorrect: false,
                     ),
                   ),
@@ -199,6 +196,7 @@ class _RegistrationState extends State<Registration> {
                       ],
                     ),
                     child: TextFormField(
+                      autovalidateMode: AutovalidateMode.always,
                       controller: _passwordController,
                       style: TextStyle(
                           fontSize: 20.0, height: 2.0, color: Colors.black),
@@ -218,7 +216,6 @@ class _RegistrationState extends State<Registration> {
                                 BorderSide(color: Colors.white, width: 1.0)),
                       ),
                       obscureText: true,
-                      autovalidate: true,
                       autocorrect: false,
                     ),
                   ),
