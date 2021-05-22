@@ -23,7 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  appwrite: ^0.4.0
+  appwrite: ^0.6.0
   flutter_bloc: ^7.0.0
   equatable: ^2.0.0
   meta: ^1.3.0

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
@@ -20,7 +21,13 @@ class FilteredTasksBloc extends Bloc<FilteredTasksEvent, FilteredTasksState> {
       {@required this.tasksBloc,
       @required this.tasksRepository,
       @required this.userRepository})
-      : super(FilteredTasksLoadInProgress()) {
+      : super(tasksBloc.state is TasksLoadSuccess
+            ? FilteredTasksLoadSuccess(
+                (tasksBloc.state as TasksLoadSuccess).tasks,
+                (tasksBloc.state as TasksLoadSuccess).tasks,
+                VisibilityFilter.all,
+                (tasksBloc.state as TasksLoadSuccess).user)
+            : FilteredTasksLoadInProgress()) {
     tasksSubscription = tasksBloc.stream.listen((state) {
       if (state is TasksLoadSuccess) {
         add(TasksUpdated((tasksBloc.state as TasksLoadSuccess).tasks,

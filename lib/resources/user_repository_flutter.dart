@@ -6,8 +6,8 @@ import '../models/models.dart';
 class UserRepositoryFlutter implements UserRepository {
   final WebClient webClient;
 
-
-  const UserRepositoryFlutter({@required this.webClient}) : assert(webClient != null);
+  const UserRepositoryFlutter({@required this.webClient})
+      : assert(webClient != null);
 
   @override
   Future<String> signup(

@@ -19,10 +19,10 @@ class FilteredTasksLoadSuccess extends FilteredTasksState {
       this.filteredTasks, this.allTasks, this.activeFilter, this.user);
 
   @override
-  List<Object> get props => [filteredTasks, allTasks, activeFilter];
+  List<Object> get props => [filteredTasks, allTasks, activeFilter, user];
 
   @override
   String toString() {
-    return 'FilteredTasksLoadSuccess {filteredTasks: $filteredTasks, allTasks: $allTasks,  activeFilter: $activeFilter}';
+    return 'FilteredTasksLoadSuccess {user: $user, filteredTasks: $filteredTasks, allTasks: $allTasks,  activeFilter: $activeFilter}';
   }
 }

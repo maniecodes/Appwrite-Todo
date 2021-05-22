@@ -11,8 +11,8 @@ class AuthenticationBloc
   final UserRepositoryFlutter userRepository;
 
   AuthenticationBloc({@required this.userRepository})
-      : assert(userRepository != null), super(AuthenticationUninitialized());
-
+      : assert(userRepository != null),
+        super(AuthenticationUninitialized());
 
   @override
   Stream<AuthenticationState> mapEventToState(
@@ -28,8 +28,12 @@ class AuthenticationBloc
     }
 
     if (event is LoggedIn) {
+      print(event);
+      print('loading');
       yield AuthenticationLoading();
+      print('after loading');
       await userRepository.getSession();
+      print('after getting session');
       yield AuthenticationAuthenticated();
     }
 

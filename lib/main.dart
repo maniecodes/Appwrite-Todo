@@ -104,9 +104,11 @@ class TaskApp extends StatelessWidget {
                 ], child: HomeScreen());
               }
               if (state is AuthenticationUnauthenticated) {
+                print('AuthenticationUnauthenticated');
                 return WelcomeScreen(userRepository: _userRepository);
               }
               if (state is AuthenticationLoading) {
+                print('AuthenticationLoading');
                 return SplashScreen();
               }
               return WelcomeScreen(userRepository: _userRepository);

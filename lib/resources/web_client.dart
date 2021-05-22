@@ -11,9 +11,9 @@ class WebClient {
   final Client client = Client();
 
   // static const API_ENDPOINT = "http://127.0.0.1/v1";
-  static const PROJECT_ID = "5eeafe5ee3d2c";
-  static const DATABASE_COLLECTION_ID = "5eeb001ebd987";
-  static const USER_COLLECTION_ID = "5eeafe9b73454";
+  static const PROJECT_ID = "60a783b9b584e";
+  static const DATABASE_COLLECTION_ID = "60a7999a412fd";
+  static const USER_COLLECTION_ID = "60a8d9d2c3646";
   WebClient({@required client}) : assert(client != null);
 
   Future<String> getCurrentUser() async {
@@ -23,8 +23,10 @@ class WebClient {
     Account account = Account(client);
     try {
       Response<dynamic> result = await account.get();
+      print('get current user id');
       if (result.statusCode == 200) {
         uid = result.data['registration'].toString();
+        print(uid);
       }
     } catch (error) {
       switch (error.response.data['code'].toString()) {
@@ -62,6 +64,7 @@ class WebClient {
           filters: ['uid=$userId'],
           orderField: 'createdDateTime',
           orderType: OrderType.desc);
+      print(result);
       final json = result.data['documents'];
       print(json);
       final tasks =
@@ -77,13 +80,13 @@ class WebClient {
     Map<String, dynamic> json = {};
     client
             .setEndpoint(API_ENDPOINT) // Your API Endpoint
-            .setProject("5eeafe5ee3d2c") // Your project ID
+            .setProject(PROJECT_ID) // Your project ID
         ;
     Database database = Database(client);
 
     try {
       Response<dynamic> result = await database.listDocuments(
-          collectionId: "5eeafe9b73454", filters: ['uid=$userID']);
+          collectionId: USER_COLLECTION_ID, filters: ['uid=$userID']);
 
       json = await result.data['documents'][0];
 
@@ -225,10 +228,15 @@ class WebClient {
             .setProject(PROJECT_ID) // Your project ID
         ;
 
+    print(client.toString());
     Account account = Account(client);
+    print(email);
+    print(password);
+    print(name);
     try {
       Response<dynamic> result = await account.create(
           email: '$email', password: '$password', name: '$name');
+      print(result.toString());
       uid = result.data['registration'].toString();
       if (uid != null) {
         //Create user session after succesfully signing up
@@ -238,6 +246,7 @@ class WebClient {
         await saveUserDetails(email, name, phone);
       }
     } catch (error) {
+      print(error.message);
       switch (error.response.data['code'].toString()) {
         case "429":
           errorMessage = "Too may request. Try again later";
@@ -275,7 +284,7 @@ class WebClient {
       );
       print(result);
       if (result.statusCode == 201) {
-        print('cre');
+        print('create');
         return true;
       } else {
         print('failed to create user session');
@@ -323,7 +332,7 @@ class WebClient {
           read: ['*'],
           write: ['*']);
     } catch (e) {
-      print(e.toString());
+      print(e.message);
     }
   }
 
